@@ -685,7 +685,17 @@ function saveDetails(){
   saveParties();
   toast("Saved");
   // Keep user on details, but list will update when they go back
+  function b64urlEncode(str){
+  // base64url (safe for URLs)
+  const b64 = btoa(unescape(encodeURIComponent(str)));
+  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
+
+function b64urlDecode(b64url){
+  const b64 = b64url.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((b64url.length + 3) % 4);
+  return decodeURIComponent(escape(atob(b64)));
+}
+
 function shareParty(){
   if(!activePartyId){
     toast("Open a party first");
@@ -825,4 +835,5 @@ if ("serviceWorker" in navigator) {
 </body>
 
 </html>
+
 
