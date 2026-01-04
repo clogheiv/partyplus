@@ -22,6 +22,22 @@
       --border:rgba(255,255,255,.10);
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius:16px;
+      /* Themes */
+[data-theme="birthday"]{
+  --bg:#2b1020;
+}
+[data-theme="fireworks"]{
+  --bg:#06142b;
+}
+[data-theme="christmas"]{
+  --bg:#0b2b16;
+}
+[data-theme="halloween"]{
+  --bg:#2a1400;
+}
+[data-theme="beach"]{
+  --bg:#003049;
+}
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -260,6 +276,17 @@
 <body>
 <header>
   <div class="header-inner">
+    <div class="pill">
+  <label for="partyTheme">Theme:</label>
+  <select id="partyTheme">
+    <option value="default">Default</option>
+    <option value="birthday">Birthday 🎂</option>
+    <option value="fireworks">Fireworks 🎆</option>
+    <option value="christmas">Christmas 🎄</option>
+    <option value="halloween">Halloween 🎃</option>
+    <option value="beach">Beach 🏖</option>
+  </select>
+    </div>
     <div class="brand">
       <strong>PartyPlus</strong>
       <span>Local parties saved on your phone</span>
@@ -769,4 +796,5 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 </body>
+
 </html>
