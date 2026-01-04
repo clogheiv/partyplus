@@ -5,848 +5,620 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PartyPlus</title>
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0b1220" />
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#111827" />
 
   <style>
     :root{
       --bg:#0b1220;
-      --card:#121a2b;
-      --card2:#0f1626;
-      --text:#e8eefc;
-      --muted:#9fb0d0;
-      --accent:#4ade80;
-      --accent2:#60a5fa;
-      --danger:#fb7185;
-      --border:rgba(255,255,255,.10);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --card:#101a33;
+      --card2:#0f1730;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --line:rgba(255,255,255,.10);
+      --accent:#60a5fa;
+      --good:#22c55e;
+      --bad:#ef4444;
+      --btn:#1f2a4a;
+      --btn2:#1a2441;
+      --shadow:0 12px 32px rgba(0,0,0,.35);
       --radius:16px;
-      /* Themes */
-[data-theme="birthday"]{
-  --bg:#2b1020;
-}
-[data-theme="fireworks"]{
-  --bg:#06142b;
-}
-[data-theme="christmas"]{
-  --bg:#0b2b16;
-}
-[data-theme="halloween"]{
-  --bg:#2a1400;
-}
-[data-theme="beach"]{
-  --bg:#003049;
-}
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 800px at 20% 0%, #162041 0%, var(--bg) 45%) fixed;
+      background: radial-gradient(1000px 600px at 20% 0%, rgba(96,165,250,.18), transparent 55%),
+                  radial-gradient(900px 700px at 90% 20%, rgba(34,197,94,.12), transparent 55%),
+                  var(--bg);
       color:var(--text);
     }
-
-    .wrap{
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 16px;
-      padding-bottom: 90px;
-    }
-
     header{
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      background: linear-gradient(to bottom, rgba(11,18,32,.92), rgba(11,18,32,.70));
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(10px);
+      background: rgba(11,18,32,.75);
+      border-bottom:1px solid var(--line);
     }
-    .header-inner{
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 14px 16px;
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .brand{
-      display:flex;
-      flex-direction:column;
-      line-height:1.1;
-    }
-    .brand strong{font-size: 18px; letter-spacing:.2px}
-    .brand span{font-size: 12px; color:var(--muted)}
+    .wrap{max-width:980px;margin:0 auto;padding:14px 14px}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .title{font-weight:800;letter-spacing:.2px;font-size:18px}
     .pill{
-      font-size:12px;
-      color:var(--muted);
-      padding:6px 10px;
-      border:1px solid var(--border);
-      border-radius:999px;
-      background: rgba(255,255,255,.04);
+      padding:6px 10px;border:1px solid var(--line);border-radius:999px;
+      color:var(--muted);font-size:12px;background:rgba(255,255,255,.04)
     }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-      margin-top:14px;
-    }
-    @media (min-width: 900px){
-      .grid{grid-template-columns: 380px 1fr;}
-    }
-
+    main{max-width:980px;margin:0 auto;padding:16px 14px 80px}
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-    .card h2{
-      margin:0;
-      font-size:14px;
-      letter-spacing:.2px;
-      color:var(--muted);
-      padding:12px 14px;
-      border-bottom:1px solid var(--border);
-      background: rgba(0,0,0,.10);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+    .cardPad{padding:14px}
+    .grid{display:grid;gap:12px}
+    @media(min-width:860px){
+      .grid{grid-template-columns: 360px 1fr; align-items:start}
     }
-    .card .content{padding:14px}
-
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      margin:10px 0 6px;
-    }
+    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
     input, textarea, select{
       width:100%;
       padding:12px 12px;
-      border-radius: 12px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(8,12,22,.55);
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.22);
       color: var(--text);
       outline:none;
     }
-    textarea{min-height:110px; resize: vertical}
-    input:focus, textarea:focus, select:focus{
-      border-color: rgba(96,165,250,.6);
-      box-shadow: 0 0 0 3px rgba(96,165,250,.18);
-    }
-
-    .row{display:flex; gap:10px; flex-wrap:wrap}
-    .row > *{flex:1; min-width: 130px;}
-
-    .btnbar{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
-    button{
-      appearance:none;
-      border:0;
-      border-radius: 14px;
-      padding: 12px 14px;
-      font-weight: 650;
-      color: #071016;
-      background: var(--accent);
-      cursor:pointer;
-      box-shadow: 0 10px 20px rgba(74,222,128,.18);
-    }
-    button.secondary{
-      background: rgba(255,255,255,.08);
+    textarea{min-height:120px;resize:vertical}
+    .btn{
+      appearance:none;border:1px solid var(--line);
+      background: var(--btn);
       color: var(--text);
-      border: 1px solid var(--border);
-      box-shadow:none;
-    }
-    button.danger{
-      background: rgba(251,113,133,.14);
-      color: #ffd6dd;
-      border: 1px solid rgba(251,113,133,.35);
-      box-shadow:none;
-    }
-    button:active{transform: translateY(1px)}
-    button:disabled{opacity:.55; cursor:not-allowed}
-
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .party-item{
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
+      padding:11px 12px;border-radius:12px;
+      font-weight:700;
       cursor:pointer;
-      transition: transform .08s ease, border-color .08s ease, background .08s ease;
+      user-select:none;
     }
-    .party-item:hover{
-      transform: translateY(-1px);
-      border-color: rgba(96,165,250,.45);
-      background: rgba(96,165,250,.08);
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{background: linear-gradient(180deg, rgba(96,165,250,.22), rgba(96,165,250,.10)); border-color: rgba(96,165,250,.35)}
+    .btn.good{background: linear-gradient(180deg, rgba(34,197,94,.22), rgba(34,197,94,.10)); border-color: rgba(34,197,94,.35)}
+    .btn.bad{background: linear-gradient(180deg, rgba(239,68,68,.22), rgba(239,68,68,.10)); border-color: rgba(239,68,68,.35)}
+    .btn.ghost{background: rgba(255,255,255,.04)}
+    .btnRow{display:flex;gap:10px;flex-wrap:wrap}
+    .muted{color:var(--muted)}
+    .list{margin:0;padding:0;list-style:none}
+    .item{
+      display:flex;gap:12px;align-items:center;justify-content:space-between;
+      padding:12px 12px;border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      border-radius:14px;
+      cursor:pointer;
     }
-    .party-item .left{min-width:0}
-    .party-item .title{
-      font-weight:750;
-      font-size:14px;
-      margin:0;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+    .item:hover{background: rgba(0,0,0,.26)}
+    .itemTitle{font-weight:800}
+    .itemMeta{font-size:12px;color:var(--muted);margin-top:2px}
+    .right{display:flex;gap:8px;align-items:center}
+    .badge{
+      font-size:11px;color:var(--muted);
+      border:1px solid var(--line);
+      padding:5px 8px;border-radius:999px;
+      background: rgba(255,255,255,.04);
     }
-    .party-item .meta{
-      font-size:12px;
-      color:var(--muted);
-      margin-top:4px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .tag{
-      font-size:12px;
-      color: #c7ddff;
-      border: 1px solid rgba(96,165,250,.30);
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(96,165,250,.10);
-      flex: none;
-    }
-
-    .empty{
-      color:var(--muted);
-      font-size:13px;
-      padding:10px 2px;
-    }
-
-    /* Screens */
-    .screen{display:none}
-    .screen.active{display:block}
-
-    /* Bottom bar (mobile-friendly) */
-    .bottom{
-      position:fixed;
-      left:0; right:0; bottom:0;
-      background: linear-gradient(to top, rgba(11,18,32,.92), rgba(11,18,32,.50));
-      border-top: 1px solid var(--border);
-      backdrop-filter: blur(8px);
-      padding: 12px 12px 14px;
-      z-index: 6;
-    }
-    .bottom-inner{
-      max-width:980px;
-      margin:0 auto;
-      display:flex;
-      gap:10px;
-      justify-content:space-between;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    .bottom .hint{
-      font-size:12px;
-      color:var(--muted);
-    }
-    .bottom .actions{display:flex; gap:10px; flex-wrap:wrap}
+    .divider{height:1px;background:var(--line);margin:12px 0}
     .toast{
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 90px;
-      background: rgba(0,0,0,.70);
-      color: white;
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      border: 1px solid rgba(255,255,255,.15);
-      display:none;
-      z-index: 10;
+      position:fixed; left:50%; bottom:20px; transform:translateX(-50%);
+      background: rgba(0,0,0,.78);
+      border: 1px solid rgba(255,255,255,.18);
+      color: var(--text);
+      padding:10px 12px;border-radius:999px;
+      font-weight:700;font-size:13px;
+      opacity:0; pointer-events:none;
+      transition: opacity .18s ease;
+      max-width:min(92vw, 620px);
+      white-space:nowrap;
+      overflow:hidden;text-overflow:ellipsis;
     }
-    .toast.show{display:block}
-    a.inline{color:#c7ddff}
+    .toast.show{opacity:1}
+    .small{font-size:12px}
+    .hint{font-size:12px;color:var(--muted);line-height:1.35}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, monospace}
   </style>
 </head>
-
 <body>
 <header>
-  <div class="header-inner">
-    <div class="pill">
-  <label for="partyTheme">Theme:</label>
-  <select id="partyTheme">
-    <option value="default">Default</option>
-    <option value="birthday">Birthday 🎂</option>
-    <option value="fireworks">Fireworks 🎆</option>
-    <option value="christmas">Christmas 🎄</option>
-    <option value="halloween">Halloween 🎃</option>
-    <option value="beach">Beach 🏖</option>
-  </select>
+  <div class="wrap">
+    <div class="row" style="justify-content:space-between">
+      <div class="row">
+        <div class="title">PartyPlus</div>
+        <div id="statusPill" class="pill">Ready</div>
+      </div>
+      <div class="row">
+        <button id="homeBtn" class="btn ghost">Home</button>
+        <button id="installBtn" class="btn primary" style="display:none">Install</button>
+      </div>
     </div>
-    <div class="brand">
-      <strong>PartyPlus</strong>
-      <span>Local parties saved on your phone</span>
-    </div>
-    <div class="pill" id="partyCountPill">0 parties</div>
   </div>
 </header>
 
-<div class="wrap">
-
-  <!-- HOME / LIST SCREEN -->
-  <section class="screen active" id="screenHome">
-    <div class="grid">
-      <div class="card">
-        <h2>
-          Parties
-          <span class="pill" id="lastSavedPill">Ready</span>
-        </h2>
-        <div class="content">
-          <div class="row">
-            <div style="flex:2; min-width:200px">
-              <label for="search">Search</label>
-              <input id="search" type="text" placeholder="Search by name, type, or location..." />
-            </div>
-            <div>
-              <label for="sort">Sort</label>
-              <select id="sort">
-                <option value="newest">Newest first</option>
-                <option value="oldest">Oldest first</option>
-                <option value="name">Name A → Z</option>
-              </select>
-            </div>
+<main>
+  <div class="grid">
+    <!-- LEFT: Home -->
+    <section id="homeView" class="card">
+      <div class="cardPad">
+        <div class="row" style="justify-content:space-between;align-items:flex-end">
+          <div>
+            <div style="font-weight:900;font-size:16px">Your Parties</div>
+            <div class="hint">Create one, tap to open, then hit <b>Share Party</b>.</div>
           </div>
+          <div class="badge" id="countBadge">0</div>
+        </div>
 
-          <div style="margin-top:12px" class="list" id="partyList"></div>
-          <div class="empty" id="emptyState" style="display:none;">
-            No parties yet. Tap <b>New Party</b> below to create one.
-          </div>
+        <div class="divider"></div>
 
-          <div class="btnbar">
-            <button class="secondary" id="btnExport">Export JSON</button>
-            <button class="secondary" id="btnImport">Import JSON</button>
-            <input id="importFile" type="file" accept="application/json" style="display:none;" />
-          </div>
+        <label for="newName">Party name</label>
+        <input id="newName" placeholder="e.g., Super Bowl, Birthday, BBQ..." />
+
+        <div class="btnRow" style="margin-top:10px">
+          <button id="createBtn" class="btn good">Create Party</button>
+          <button id="resetAllBtn" class="btn bad">Reset All</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <label for="search">Search</label>
+        <input id="search" placeholder="Search parties..." />
+
+        <label for="sort">Sort</label>
+        <select id="sort">
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="name">Name</option>
+        </select>
+
+        <div class="divider"></div>
+
+        <ul id="partyList" class="list" style="display:grid;gap:10px;margin-top:10px"></ul>
+
+        <div class="divider"></div>
+        <div class="hint small">
+          Tip: shared links look like
+          <span class="mono">partyplus.html?party=YOUR_ID</span>.
         </div>
       </div>
+    </section>
 
-      <div class="card">
-        <h2>Create a new party</h2>
-        <div class="content">
-          <label for="newName">Party name</label>
-          <input id="newName" type="text" placeholder="e.g., Ashley’s Wedding Shower" />
-
-          <div class="row">
-            <div>
-              <label for="newType">Type</label>
-              <input id="newType" type="text" placeholder="Birthday, BBQ, etc." />
-            </div>
-            <div>
-              <label for="newDate">Date</label>
-              <input id="newDate" type="date" />
-            </div>
+    <!-- RIGHT: Party -->
+    <section id="partyView" class="card" style="display:none">
+      <div class="cardPad">
+        <div class="row" style="justify-content:space-between">
+          <div>
+            <div id="partyTitle" style="font-weight:950;font-size:18px">Party</div>
+            <div id="partyIdLine" class="hint mono"></div>
           </div>
-
-          <div class="row">
-            <div>
-              <label for="newTime">Time</label>
-              <input id="newTime" type="time" />
-            </div>
-            <div>
-              <label for="newLocation">Location</label>
-              <input id="newLocation" type="text" placeholder="Address or ‘Our house’" />
-            </div>
-          </div>
-
-          <label for="newNotes">Notes</label>
-          <textarea id="newNotes" placeholder="Anything you want to remember..."></textarea>
-
-          <div class="btnbar">
-            <button id="btnCreate">Create Party</button>
-            <button class="secondary" id="btnClearCreate">Clear</button>
+          <div class="btnRow">
+            <button id="shareBtn" class="btn primary">Share Party</button>
+            <button id="deleteBtn" class="btn bad">Delete</button>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- DETAILS SCREEN -->
-  <section class="screen" id="screenDetails">
-    <div class="card">
-      <h2>
-        Party details
-        <span class="pill" id="detailIdPill">—</span>
-      </h2>
-      <div class="content">
-        <div class="row">
-          <div style="flex:2; min-width:200px">
-            <label for="editName">Party name</label>
-            <input id="editName" type="text" />
+        <div class="divider"></div>
+
+        <label for="type">Type</label>
+        <input id="type" placeholder="Birthday, Holiday, BBQ..." />
+
+        <div class="row" style="gap:12px">
+          <div style="flex:1">
+            <label for="date">Date</label>
+            <input id="date" type="date" />
           </div>
           <div style="flex:1">
-            <label for="editType">Type</label>
-            <input id="editType" type="text" />
+            <label for="time">Time</label>
+            <input id="time" type="time" />
           </div>
         </div>
 
-        <div class="row">
-          <div>
-            <label for="editDate">Date</label>
-            <input id="editDate" type="date" />
-          </div>
-          <div>
-            <label for="editTime">Time</label>
-            <input id="editTime" type="time" />
-          </div>
-          <div style="flex:2; min-width:200px">
-            <label for="editLocation">Location</label>
-            <input id="editLocation" type="text" />
-          </div>
+        <label for="location">Location</label>
+        <input id="location" placeholder="Address or place name" />
+
+        <label for="notes">Notes</label>
+        <textarea id="notes" placeholder="Agenda, what to bring, who’s bringing what..."></textarea>
+
+        <div class="btnRow" style="margin-top:10px">
+          <button id="saveBtn" class="btn good">Save</button>
+          <button id="copyLinkBtn" class="btn">Copy Link</button>
         </div>
 
-        <label for="editNotes">Notes</label>
-        <textarea id="editNotes"></textarea>
+        <div class="divider"></div>
 
-        <div class="btnbar">
-  <button id="btnSave">Save Changes</button>
-  <button id="btnShare">Share Party</button>
-  <button class="secondary" id="btnBack">Back to List</button>
-  <button class="danger" id="btnDelete">Delete Party</button>
+        <div class="hint">
+          If someone opens your link and the party isn’t found, they’ll see a message.
+          (They won’t get a blank screen.)
         </div>
       </div>
-    </div>
-  </section>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<div class="bottom">
-  <div class="bottom-inner">
-    <div class="hint">
-      Tip: If the “Install” option doesn’t show, open this page in Chrome and refresh once.
-    </div>
-    <div class="actions">
-      <button class="secondary" id="btnGoHome">Home</button>
-      <button class="danger" id="btnResetAll">Reset All Parties</button>
-    </div>
+    </section>
   </div>
-</div>
+</main>
+
+<div id="toast" class="toast"></div>
 
 <script>
-/* =========================
-   PartyPlus — single-file app
-   Uses localStorage.
-   Key: partyplus_parties_v2
-========================= */
+(() => {
+  "use strict";
 
-const STORAGE_KEY = "partyplus_parties_v2";
+  // ====== Storage ======
+  const STORAGE_KEY = "partyplus_v3_parties";
+  const $ = (id) => document.getElementById(id);
 
-const $ = (id) => document.getElementById(id);
+  // ====== UI ======
+  const statusPill = $("statusPill");
+  const toastEl = $("toast");
 
-const screenHome = $("screenHome");
-const screenDetails = $("screenDetails");
+  const homeView = $("homeView");
+  const partyView = $("partyView");
 
-const partyListEl = $("partyList");
-const emptyStateEl = $("emptyState");
-const partyCountPill = $("partyCountPill");
-const lastSavedPill = $("lastSavedPill");
-const detailIdPill = $("detailIdPill");
+  const partyListEl = $("partyList");
+  const countBadge = $("countBadge");
+  const searchEl = $("search");
+  const sortEl = $("sort");
 
-const searchEl = $("search");
-const sortEl = $("sort");
+  const newNameEl = $("newName");
+  const createBtn = $("createBtn");
+  const resetAllBtn = $("resetAllBtn");
+  const homeBtn = $("homeBtn");
 
-const newName = $("newName");
-const newType = $("newType");
-const newDate = $("newDate");
-const newTime = $("newTime");
-const newLocation = $("newLocation");
-const newNotes = $("newNotes");
+  const partyTitle = $("partyTitle");
+  const partyIdLine = $("partyIdLine");
+  const typeEl = $("type");
+  const dateEl = $("date");
+  const timeEl = $("time");
+  const locationEl = $("location");
+  const notesEl = $("notes");
 
-const editName = $("editName");
-const editType = $("editType");
-const editDate = $("editDate");
-const editTime = $("editTime");
-const editLocation = $("editLocation");
-const editNotes = $("editNotes");
+  const saveBtn = $("saveBtn");
+  const deleteBtn = $("deleteBtn");
+  const shareBtn = $("shareBtn");
+  const copyLinkBtn = $("copyLinkBtn");
 
-const toastEl = $("toast");
+  // ====== State ======
+  let parties = [];
+  let currentId = null;
+  let installPromptEvent = null;
 
-let parties = [];
-let activePartyId = null;
-
-function nowISO(){
-  return new Date().toISOString();
-}
-
-function toast(msg){
-  toastEl.textContent = msg;
-  toastEl.classList.add("show");
-  setTimeout(() => toastEl.classList.remove("show"), 1500);
-}
-
-function loadParties(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    parties = raw ? JSON.parse(raw) : [];
-    if(!Array.isArray(parties)) parties = [];
-  }catch(e){
-    parties = [];
-  }
-}
-  (function autoOpenSharedParty(){
-  try{
-    const params = new URLSearchParams(window.location.search);
-    let sharedId = params.get("party") || sessionStorage.getItem("pendingParty");
-    if(sharedId){
-      sessionStorage.removeItem("pendingParty");
-      setTimeout(() => {
-        if(typeof openParty === "function") openParty(sharedId);
-      }, 0);
-    }
-  }catch(e){}
-})();
-function saveParties(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(parties));
-  lastSavedPill.textContent = "Saved";
-  setTimeout(() => lastSavedPill.textContent = "Ready", 900);
-}
-
-function formatMeta(p){
-  const bits = [];
-  if(p.type) bits.push(p.type);
-  if(p.date) bits.push(p.date);
-  if(p.time) bits.push(p.time);
-  if(p.location) bits.push(p.location);
-  return bits.join(" • ");
-}
-
-function getFilteredSorted(){
-  const q = (searchEl.value || "").trim().toLowerCase();
-  let list = parties.slice();
-
-  if(q){
-    list = list.filter(p => {
-      const blob = `${p.name||""} ${p.type||""} ${p.location||""} ${p.notes||""}`.toLowerCase();
-      return blob.includes(q);
-    });
+  function setStatus(text) {
+    statusPill.textContent = text;
   }
 
-  const sort = sortEl.value;
-  if(sort === "newest"){
-    list.sort((a,b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
-  }else if(sort === "oldest"){
-    list.sort((a,b) => (a.createdAt || "").localeCompare(b.createdAt || ""));
-  }else if(sort === "name"){
-    list.sort((a,b) => (a.name||"").localeCompare(b.name||""));
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    setTimeout(() => toastEl.classList.remove("show"), 1700);
   }
-  return list;
-}
 
-function renderList(){
-  const list = getFilteredSorted();
-
-  partyListEl.innerHTML = "";
-  emptyStateEl.style.display = (parties.length === 0) ? "block" : "none";
-
-  partyCountPill.textContent = `${parties.length} ${parties.length === 1 ? "party" : "parties"}`;
-
-  list.forEach(p => {
-    const item = document.createElement("div");
-    item.className = "party-item";
-    item.setAttribute("role", "button");
-    item.setAttribute("tabindex", "0");
-
-    const left = document.createElement("div");
-    left.className = "left";
-
-    const title = document.createElement("p");
-    title.className = "title";
-    title.textContent = p.name || "(Untitled party)";
-
-    const meta = document.createElement("p");
-    meta.className = "meta";
-    meta.textContent = formatMeta(p) || "No details yet";
-
-    left.appendChild(title);
-    left.appendChild(meta);
-
-    const tag = document.createElement("div");
-    tag.className = "tag";
-    tag.textContent = "Open";
-
-    item.appendChild(left);
-    item.appendChild(tag);
-
-    const open = () => openDetails(p.id);
-    item.addEventListener("click", open);
-    item.addEventListener("keydown", (e) => {
-      if(e.key === "Enter" || e.key === " "){
-        e.preventDefault();
-        open();
-      }
-    });
-
-    partyListEl.appendChild(item);
+  // On-screen crash reporting (prevents "dead buttons" mystery)
+  window.addEventListener("error", (e) => {
+    try { toast("JS error: " + (e.message || "unknown")); } catch(_) {}
   });
-}
+  window.addEventListener("unhandledrejection", (e) => {
+    try { toast("Promise error: " + (e.reason?.message || e.reason || "unknown")); } catch(_) {}
+  });
 
-function showHome(){
-  screenDetails.classList.remove("active");
-  screenHome.classList.add("active");
-  activePartyId = null;
-  renderList();
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-
-function showDetails(){
-  screenHome.classList.remove("active");
-  screenDetails.classList.add("active");
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-
-function makeId(){
-  // Simple unique-ish ID
-  return "p_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
-}
-
-function clearCreateForm(){
-  newName.value = "";
-  newType.value = "";
-  newDate.value = "";
-  newTime.value = "";
-  newLocation.value = "";
-  newNotes.value = "";
-}
-function createParty(){
-  const name = newName.value.trim();
-  if(!name){
-    toast("Give it a name first 🙂");
-    newName.focus();
-    return;
-  }
-  const p = {
-    id: makeId(),
-    name,
-    type: newType.value.trim(),
-    date: newDate.value,
-    time: newTime.value,
-    location: newLocation.value.trim(),
-    notes: newNotes.value.trim(),
-    createdAt: nowISO(),
-    updatedAt: nowISO()
-  };
-  parties.unshift(p);
-  saveParties();
-  clearCreateForm();
-  renderList();
-  toast("Party created");
-  openDetails(p.id);
-}
-function openDetails(id){
-  const p = parties.find(x => x.id === id);
-  if(!p){
-    toast("Party not found");
-    return;
-  }
-  activePartyId = id;
-
-  editName.value = p.name || "";
-  editType.value = p.type || "";
-  editDate.value = p.date || "";
-  editTime.value = p.time || "";
-  editLocation.value = p.location || "";
-  editNotes.value = p.notes || "";
-
-  detailIdPill.textContent = id.slice(0, 10) + "…";
-  showDetails();
-}
-
-function saveDetails(){
-  if(!activePartyId) return;
-
-  const idx = parties.findIndex(x => x.id === activePartyId);
-  if(idx === -1){
-    toast("Party not found");
-    showHome();
-    return;
+  function loadParties() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      parties = Array.isArray(parsed) ? parsed : [];
+    } catch {
+      parties = [];
+    }
   }
 
-  const name = editName.value.trim();
-  if(!name){
-    toast("Party name can’t be blank");
-    editName.focus();
-    return;
+  function saveParties() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(parties));
+    setStatus("Saved");
+    setTimeout(() => setStatus("Ready"), 900);
   }
 
-  parties[idx] = {
-    ...parties[idx],
-    name,
-    type: editType.value.trim(),
-    date: editDate.value,
-    time: editTime.value,
-    location: editLocation.value.trim(),
-    notes: editNotes.value.trim(),
-    updatedAt: nowISO()
-  };
-
-  saveParties();
-  toast("Saved");
-  // Keep user on details, but list will update when they go back
-  function b64urlEncode(str){
-  // base64url (safe for URLs)
-  const b64 = btoa(unescape(encodeURIComponent(str)));
-  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
-}
-
-function b64urlDecode(b64url){
-  const b64 = b64url.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((b64url.length + 3) % 4);
-  return decodeURIComponent(escape(atob(b64)));
-}
-
-function shareParty(){
-  if(!activePartyId){
-    toast("Open a party first");
-    return;
+  function uid() {
+    // Short but unique enough for this app
+    return "p_" + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(3);
   }
 
-  const p = parties.find(x => x.id === activePartyId);
-  if(!p){
-    toast("Party not found");
-    return;
+  function formatMeta(p) {
+    const bits = [];
+    if (p.type) bits.push(p.type);
+    if (p.date) bits.push(p.date);
+    if (p.time) bits.push(p.time);
+    if (p.location) bits.push(p.location);
+    return bits.join(" • ");
   }
 
-  const base = window.location.origin + window.location.pathname;
-  const url = `${base}?party=${encodeURIComponent(p.id)}`;
+  function getFilteredSorted() {
+    const q = (searchEl.value || "").trim().toLowerCase();
+    let list = parties.slice();
+    if (q) {
+      list = list.filter(p => {
+        const blob = `${p.name||""} ${p.type||""} ${p.location||""} ${p.notes||""}`.toLowerCase();
+        return blob.includes(q);
+      });
+    }
 
-  if(navigator.share){
-    navigator.share({
-      title: p.name || "Party",
-      text: "Join my party on PartyPlus!",
-      url
-    });
-  } else {
-    navigator.clipboard.writeText(url);
-    toast("Link copied to clipboard");
+    const sort = sortEl.value;
+    if (sort === "newest") list.sort((a,b) => (b.createdAt||"").localeCompare(a.createdAt||""));
+    else if (sort === "oldest") list.sort((a,b) => (a.createdAt||"").localeCompare(b.createdAt||""));
+    else if (sort === "name") list.sort((a,b) => (a.name||"").localeCompare(b.name||""));
+
+    return list;
   }
-}
-function deleteParty(){
-  if(!activePartyId) return;
-  const p = parties.find(x => x.id === activePartyId);
-  if(!p) return;
 
-  const ok = confirm(`Delete "${p.name}"?`);
-  if(!ok) return;
+  function renderPartyList() {
+    const list = getFilteredSorted();
+    countBadge.textContent = String(list.length);
+    partyListEl.innerHTML = "";
 
-  parties = parties.filter(x => x.id !== activePartyId);
-  saveParties();
-  toast("Deleted");
-  showHome();
-}
+    if (!list.length) {
+      const li = document.createElement("li");
+      li.className = "hint";
+      li.textContent = "No parties yet. Create one above.";
+      partyListEl.appendChild(li);
+      return;
+    }
 
-function resetAll(){
-  const ok = confirm("Reset ALL parties? This will erase everything saved in this app.");
-  if(!ok) return;
+    for (const p of list) {
+      const li = document.createElement("li");
+      li.className = "item";
+      li.setAttribute("role","button");
+      li.tabIndex = 0;
 
-  localStorage.removeItem(STORAGE_KEY);
-  parties = [];
-  activePartyId = null;
-  renderList();
-  showHome();
-  toast("All parties reset");
-}
+      const left = document.createElement("div");
+      const t = document.createElement("div");
+      t.className = "itemTitle";
+      t.textContent = p.name || "(Untitled)";
+      const m = document.createElement("div");
+      m.className = "itemMeta";
+      m.textContent = formatMeta(p) || "Tap to open";
+      left.appendChild(t);
+      left.appendChild(m);
 
-function exportJSON(){
-  const data = JSON.stringify({ version: 2, exportedAt: nowISO(), parties }, null, 2);
-  const blob = new Blob([data], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
+      const right = document.createElement("div");
+      right.className = "right";
+      const b = document.createElement("div");
+      b.className = "badge mono";
+      b.textContent = (p.id || "").slice(-6);
+      right.appendChild(b);
 
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "partyplus-export.json";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+      li.appendChild(left);
+      li.appendChild(right);
 
-  URL.revokeObjectURL(url);
-  toast("Exported");
-}
-
-function importJSONFile(file){
-  const reader = new FileReader();
-  reader.onload = () => {
-    try{
-      const obj = JSON.parse(reader.result);
-      const imported = obj.parties || obj;
-      if(!Array.isArray(imported)) throw new Error("Invalid file");
-
-      // Merge by id (keep newest updatedAt)
-      const map = new Map(parties.map(p => [p.id, p]));
-      imported.forEach(p => {
-        if(!p || !p.id) return;
-        const existing = map.get(p.id);
-        if(!existing){
-          map.set(p.id, p);
-        }else{
-          const a = existing.updatedAt || existing.createdAt || "";
-          const b = p.updatedAt || p.createdAt || "";
-          if(b > a) map.set(p.id, p);
-        }
+      li.addEventListener("click", () => openParty(p.id));
+      li.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") openParty(p.id);
       });
 
-      parties = Array.from(map.values());
-      saveParties();
-      renderList();
-      toast("Imported");
-    }catch(e){
-      alert("That file doesn’t look like a PartyPlus export.");
+      partyListEl.appendChild(li);
     }
-  };
-  reader.readAsText(file);
-}
+  }
 
-/* Events */
-$("btnCreate").addEventListener("click", createParty);
-$("btnClearCreate").addEventListener("click", clearCreateForm);
-$("btnShare").addEventListener("click", shareParty);
-$("btnSave").addEventListener("click", saveDetails);
-  
-$("btnBack").addEventListener("click", showHome);
-$("btnDelete").addEventListener("click", deleteParty);
+  function showHome() {
+    partyView.style.display = "none";
+    homeView.style.display = "block";
+    currentId = null;
+    history.replaceState(null, "", "./partyplus.html");
+    setStatus("Ready");
+  }
 
-$("btnResetAll").addEventListener("click", resetAll);
-$("btnGoHome").addEventListener("click", showHome);
+  function showParty() {
+    homeView.style.display = "none";
+    partyView.style.display = "block";
+  }
 
-searchEl.addEventListener("input", renderList);
-sortEl.addEventListener("change", renderList);
+  function getParty(id) {
+    return parties.find(p => p.id === id) || null;
+  }
 
-$("btnExport").addEventListener("click", exportJSON);
-$("btnImport").addEventListener("click", () => $("importFile").click());
-$("importFile").addEventListener("change", (e) => {
-  const f = e.target.files && e.target.files[0];
-  if(f) importJSONFile(f);
-  e.target.value = "";
-});
+  function openParty(id) {
+    const p = getParty(id);
+    if (!p) {
+      toast("Party not found.");
+      showHome();
+      return;
+    }
+    currentId = id;
 
-/* Boot */
-loadParties();
-renderList();
-showHome();
+    partyTitle.textContent = p.name || "Party";
+    partyIdLine.textContent = `ID: ${p.id}`;
 
-/* PWA service worker */
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
+    typeEl.value = p.type || "";
+    dateEl.value = p.date || "";
+    timeEl.value = p.time || "";
+    locationEl.value = p.location || "";
+    notesEl.value = p.notes || "";
+
+    // Put the shareable URL in the address bar
+    const url = new URL(window.location.href);
+    url.searchParams.set("party", p.id);
+    history.replaceState(null, "", url.toString());
+
+    showParty();
+  }
+
+  function createParty() {
+    const name = (newNameEl.value || "").trim();
+    if (!name) {
+      toast("Enter a party name.");
+      newNameEl.focus();
+      return;
+    }
+
+    const p = {
+      id: uid(),
+      name,
+      type: "",
+      date: "",
+      time: "",
+      location: "",
+      notes: "",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    parties.unshift(p);
+    saveParties();
+    newNameEl.value = "";
+    renderPartyList();
+    toast("Party created");
+    openParty(p.id);
+  }
+
+  function saveCurrent() {
+    if (!currentId) return;
+    const p = getParty(currentId);
+    if (!p) return;
+
+    p.type = (typeEl.value || "").trim();
+    p.date = dateEl.value || "";
+    p.time = timeEl.value || "";
+    p.location = (locationEl.value || "").trim();
+    p.notes = (notesEl.value || "").trim();
+    p.updatedAt = new Date().toISOString();
+
+    saveParties();
+    renderPartyList();
+    toast("Saved");
+  }
+
+  function deleteCurrent() {
+    if (!currentId) return;
+    const p = getParty(currentId);
+    if (!p) return;
+
+    if (!confirm(`Delete "${p.name}"?`)) return;
+
+    parties = parties.filter(x => x.id !== currentId);
+    saveParties();
+    renderPartyList();
+    toast("Deleted");
+    showHome();
+  }
+
+  function shareUrlFor(id) {
+    const url = new URL(window.location.href);
+    url.pathname = url.pathname.replace(/\/[^\/]*$/, "/partyplus.html");
+    url.searchParams.set("party", id);
+    return url.toString();
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast("Link copied");
+      return true;
+    } catch {
+      // fallback
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        toast("Link copied");
+        return true;
+      } catch {
+        toast("Copy failed");
+        return false;
+      } finally {
+        ta.remove();
+      }
+    }
+  }
+
+  async function shareCurrent() {
+    if (!currentId) return;
+    const p = getParty(currentId);
+    if (!p) return;
+
+    const url = shareUrlFor(currentId);
+    const title = `PartyPlus: ${p.name || "Party"}`;
+    const text = `Join my party: ${p.name || "Party"}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text, url });
+        toast("Shared");
+        return;
+      } catch {
+        // if user cancels, just ignore
+      }
+    }
+    await copyText(url);
+  }
+
+  function resetAll() {
+    if (!confirm("Reset ALL parties? This cannot be undone.")) return;
+    parties = [];
+    saveParties();
+    renderPartyList();
+    toast("Reset complete");
+    showHome();
+  }
+
+  // ====== Events ======
+  createBtn.addEventListener("click", createParty);
+  resetAllBtn.addEventListener("click", resetAll);
+  homeBtn.addEventListener("click", showHome);
+
+  searchEl.addEventListener("input", renderPartyList);
+  sortEl.addEventListener("change", renderPartyList);
+
+  saveBtn.addEventListener("click", saveCurrent);
+  deleteBtn.addEventListener("click", deleteCurrent);
+  shareBtn.addEventListener("click", shareCurrent);
+  copyLinkBtn.addEventListener("click", async () => {
+    if (!currentId) return;
+    await copyText(shareUrlFor(currentId));
   });
-}
+
+  // ====== Auto-open shared party (ONLY ONE block) ======
+  function autoOpenSharedParty() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const sharedId = params.get("party");
+      if (sharedId) {
+        // Wait for list + handlers to be ready
+        setTimeout(() => openParty(sharedId), 0);
+      }
+    } catch {}
+  }
+
+  // ====== PWA install prompt ======
+  const installBtn = $("installBtn");
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    installPromptEvent = e;
+    installBtn.style.display = "inline-block";
+  });
+  installBtn.addEventListener("click", async () => {
+    if (!installPromptEvent) return;
+    installPromptEvent.prompt();
+    try { await installPromptEvent.userChoice; } catch {}
+    installPromptEvent = null;
+    installBtn.style.display = "none";
+  });
+
+  // ====== Service worker ======
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    });
+  }
+
+  // ====== Boot ======
+  loadParties();
+  renderPartyList();
+  showHome();
+  autoOpenSharedParty();
+
+})();
 </script>
 </body>
-
 </html>
-
-
-
-
