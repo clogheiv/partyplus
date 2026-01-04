@@ -497,12 +497,12 @@ function loadParties(){
     parties = [];
   }
 }
-// Auto-open shared party if URL has ?party=...
-(function autoOpenSharedParty(){
+  (function autoOpenSharedParty(){
   try{
     const params = new URLSearchParams(window.location.search);
-    const sharedId = params.get("party");
+    let sharedId = params.get("party") || sessionStorage.getItem("pendingParty");
     if(sharedId){
+      sessionStorage.removeItem("pendingParty");
       setTimeout(() => {
         if(typeof openParty === "function") openParty(sharedId);
       }, 0);
@@ -846,6 +846,7 @@ if ("serviceWorker" in navigator) {
 </body>
 
 </html>
+
 
 
 
