@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PartyPlus</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b1220" />
+
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#121a2b;
+      --card2:#0f1626;
+      --text:#e8eefc;
+      --muted:#9fb0d0;
+      --accent:#4ade80;
+      --accent2:#60a5fa;
+      --danger:#fb7185;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 20% 0%, #162041 0%, var(--bg) 45%) fixed;
+      color:var(--text);
+    }
+
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 16px;
+      padding-bottom: 90px;
+    }
+
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: linear-gradient(to bottom, rgba(11,18,32,.92), rgba(11,18,32,.70));
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 14px 16px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      line-height:1.1;
+    }
+    .brand strong{font-size: 18px; letter-spacing:.2px}
+    .brand span{font-size: 12px; color:var(--muted)}
+    .pill{
+      font-size:12px;
+      color:var(--muted);
+      padding:6px 10px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (min-width: 900px){
+      .grid{grid-template-columns: 380px 1fr;}
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card h2{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.2px;
+      color:var(--muted);
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      background: rgba(0,0,0,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .card .content{padding:14px}
+
+    label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin:10px 0 6px;
+    }
+    input, textarea, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(8,12,22,.55);
+      color: var(--text);
+      outline:none;
+    }
+    textarea{min-height:110px; resize: vertical}
+    input:focus, textarea:focus, select:focus{
+      border-color: rgba(96,165,250,.6);
+      box-shadow: 0 0 0 3px rgba(96,165,250,.18);
+    }
+
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .row > *{flex:1; min-width: 130px;}
+
+    .btnbar{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    button{
+      appearance:none;
+      border:0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 650;
+      color: #071016;
+      background: var(--accent);
+      cursor:pointer;
+      box-shadow: 0 10px 20px rgba(74,222,128,.18);
+    }
+    button.secondary{
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow:none;
+    }
+    button.danger{
+      background: rgba(251,113,133,.14);
+      color: #ffd6dd;
+      border: 1px solid rgba(251,113,133,.35);
+      box-shadow:none;
+    }
+    button:active{transform: translateY(1px)}
+    button:disabled{opacity:.55; cursor:not-allowed}
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .party-item{
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      cursor:pointer;
+      transition: transform .08s ease, border-color .08s ease, background .08s ease;
+    }
+    .party-item:hover{
+      transform: translateY(-1px);
+      border-color: rgba(96,165,250,.45);
+      background: rgba(96,165,250,.08);
+    }
+    .party-item .left{min-width:0}
+    .party-item .title{
+      font-weight:750;
+      font-size:14px;
+      margin:0;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .party-item .meta{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:4px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .tag{
+      font-size:12px;
+      color: #c7ddff;
+      border: 1px solid rgba(96,165,250,.30);
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(96,165,250,.10);
+      flex: none;
+    }
+
+    .empty{
+      color:var(--muted);
+      font-size:13px;
+      padding:10px 2px;
+    }
+
+    /* Screens */
+    .screen{display:none}
+    .screen.active{display:block}
+
+    /* Bottom bar (mobile-friendly) */
+    .bottom{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      background: linear-gradient(to top, rgba(11,18,32,.92), rgba(11,18,32,.50));
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      padding: 12px 12px 14px;
+      z-index: 6;
+    }
+    .bottom-inner{
+      max-width:980px;
+      margin:0 auto;
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .bottom .hint{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .bottom .actions{display:flex; gap:10px; flex-wrap:wrap}
+    .toast{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 90px;
+      background: rgba(0,0,0,.70);
+      color: white;
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,.15);
+      display:none;
+      z-index: 10;
+    }
+    .toast.show{display:block}
+    a.inline{color:#c7ddff}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <strong>PartyPlus</strong>
+      <span>Local parties saved on your phone</span>
+    </div>
+    <div class="pill" id="partyCountPill">0 parties</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HOME / LIST SCREEN -->
+  <section class="screen active" id="screenHome">
+    <div class="grid">
+      <div class="card">
+        <h2>
+          Parties
+          <span class="pill" id="lastSavedPill">Ready</span>
+        </h2>
+        <div class="content">
+          <div class="row">
+            <div style="flex:2; min-width:200px">
+              <label for="search">Search</label>
+              <input id="search" type="text" placeholder="Search by name, type, or location..." />
+            </div>
+            <div>
+              <label for="sort">Sort</label>
+              <select id="sort">
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="name">Name A → Z</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="list" id="partyList"></div>
+          <div class="empty" id="emptyState" style="display:none;">
+            No parties yet. Tap <b>New Party</b> below to create one.
+          </div>
+
+          <div class="btnbar">
+            <button class="secondary" id="btnExport">Export JSON</button>
+            <button class="secondary" id="btnImport">Import JSON</button>
+            <input id="importFile" type="file" accept="application/json" style="display:none;" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Create a new party</h2>
+        <div class="content">
+          <label for="newName">Party name</label>
+          <input id="newName" type="text" placeholder="e.g., Ashley’s Wedding Shower" />
+
+          <div class="row">
+            <div>
+              <label for="newType">Type</label>
+              <input id="newType" type="text" placeholder="Birthday, BBQ, etc." />
+            </div>
+            <div>
+              <label for="newDate">Date</label>
+              <input id="newDate" type="date" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="newTime">Time</label>
+              <input id="newTime" type="time" />
+            </div>
+            <div>
+              <label for="newLocation">Location</label>
+              <input id="newLocation" type="text" placeholder="Address or ‘Our house’" />
+            </div>
+          </div>
+
+          <label for="newNotes">Notes</label>
+          <textarea id="newNotes" placeholder="Anything you want to remember..."></textarea>
+
+          <div class="btnbar">
+            <button id="btnCreate">Create Party</button>
+            <button class="secondary" id="btnClearCreate">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DETAILS SCREEN -->
+  <section class="screen" id="screenDetails">
+    <div class="card">
+      <h2>
+        Party details
+        <span class="pill" id="detailIdPill">—</span>
+      </h2>
+      <div class="content">
+        <div class="row">
+          <div style="flex:2; min-width:200px">
+            <label for="editName">Party name</label>
+            <input id="editName" type="text" />
+          </div>
+          <div style="flex:1">
+            <label for="editType">Type</label>
+            <input id="editType" type="text" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="editDate">Date</label>
+            <input id="editDate" type="date" />
+          </div>
+          <div>
+            <label for="editTime">Time</label>
+            <input id="editTime" type="time" />
+          </div>
+          <div style="flex:2; min-width:200px">
+            <label for="editLocation">Location</label>
+            <input id="editLocation" type="text" />
+          </div>
+        </div>
+
+        <label for="editNotes">Notes</label>
+        <textarea id="editNotes"></textarea>
+
+        <div class="btnbar">
+          <button id="btnSave">Save Changes</button>
+          <button class="secondary" id="btnBack">Back to List</button>
+          <button class="danger" id="btnDelete">Delete Party</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="bottom">
+  <div class="bottom-inner">
+    <div class="hint">
+      Tip: If the “Install” option doesn’t show, open this page in Chrome and refresh once.
+    </div>
+    <div class="actions">
+      <button class="secondary" id="btnGoHome">Home</button>
+      <button class="danger" id="btnResetAll">Reset All Parties</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================
+   PartyPlus — single-file app
+   Uses localStorage.
+   Key: partyplus_parties_v2
+========================= */
+
+const STORAGE_KEY = "partyplus_parties_v2";
+
+const $ = (id) => document.getElementById(id);
+
+const screenHome = $("screenHome");
+const screenDetails = $("screenDetails");
+
+const partyListEl = $("partyList");
+const emptyStateEl = $("emptyState");
+const partyCountPill = $("partyCountPill");
+const lastSavedPill = $("lastSavedPill");
+const detailIdPill = $("detailIdPill");
+
+const searchEl = $("search");
+const sortEl = $("sort");
+
+const newName = $("newName");
+const newType = $("newType");
+const newDate = $("newDate");
+const newTime = $("newTime");
+const newLocation = $("newLocation");
+const newNotes = $("newNotes");
+
+const editName = $("editName");
+const editType = $("editType");
+const editDate = $("editDate");
+const editTime = $("editTime");
+const editLocation = $("editLocation");
+const editNotes = $("editNotes");
+
+const toastEl = $("toast");
+
+let parties = [];
+let activePartyId = null;
+
+function nowISO(){
+  return new Date().toISOString();
+}
+
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  setTimeout(() => toastEl.classList.remove("show"), 1500);
+}
+
+function loadParties(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    parties = raw ? JSON.parse(raw) : [];
+    if(!Array.isArray(parties)) parties = [];
+  }catch(e){
+    parties = [];
+  }
+}
+
+function saveParties(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(parties));
+  lastSavedPill.textContent = "Saved";
+  setTimeout(() => lastSavedPill.textContent = "Ready", 900);
+}
+
+function formatMeta(p){
+  const bits = [];
+  if(p.type) bits.push(p.type);
+  if(p.date) bits.push(p.date);
+  if(p.time) bits.push(p.time);
+  if(p.location) bits.push(p.location);
+  return bits.join(" • ");
+}
+
+function getFilteredSorted(){
+  const q = (searchEl.value || "").trim().toLowerCase();
+  let list = parties.slice();
+
+  if(q){
+    list = list.filter(p => {
+      const blob = `${p.name||""} ${p.type||""} ${p.location||""} ${p.notes||""}`.toLowerCase();
+      return blob.includes(q);
+    });
+  }
+
+  const sort = sortEl.value;
+  if(sort === "newest"){
+    list.sort((a,b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+  }else if(sort === "oldest"){
+    list.sort((a,b) => (a.createdAt || "").localeCompare(b.createdAt || ""));
+  }else if(sort === "name"){
+    list.sort((a,b) => (a.name||"").localeCompare(b.name||""));
+  }
+  return list;
+}
+
+function renderList(){
+  const list = getFilteredSorted();
+
+  partyListEl.innerHTML = "";
+  emptyStateEl.style.display = (parties.length === 0) ? "block" : "none";
+
+  partyCountPill.textContent = `${parties.length} ${parties.length === 1 ? "party" : "parties"}`;
+
+  list.forEach(p => {
+    const item = document.createElement("div");
+    item.className = "party-item";
+    item.setAttribute("role", "button");
+    item.setAttribute("tabindex", "0");
+
+    const left = document.createElement("div");
+    left.className = "left";
+
+    const title = document.createElement("p");
+    title.className = "title";
+    title.textContent = p.name || "(Untitled party)";
+
+    const meta = document.createElement("p");
+    meta.className = "meta";
+    meta.textContent = formatMeta(p) || "No details yet";
+
+    left.appendChild(title);
+    left.appendChild(meta);
+
+    const tag = document.createElement("div");
+    tag.className = "tag";
+    tag.textContent = "Open";
+
+    item.appendChild(left);
+    item.appendChild(tag);
+
+    const open = () => openDetails(p.id);
+    item.addEventListener("click", open);
+    item.addEventListener("keydown", (e) => {
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        open();
+      }
+    });
+
+    partyListEl.appendChild(item);
+  });
+}
+
+function showHome(){
+  screenDetails.classList.remove("active");
+  screenHome.classList.add("active");
+  activePartyId = null;
+  renderList();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function showDetails(){
+  screenHome.classList.remove("active");
+  screenDetails.classList.add("active");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function makeId(){
+  // Simple unique-ish ID
+  return "p_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+}
+
+function clearCreateForm(){
+  newName.value = "";
+  newType.value = "";
+  newDate.value = "";
+  newTime.value = "";
+  newLocation.value = "";
+  newNotes.value = "";
+}
+function createParty(){
+  const name = newName.value.trim();
+  if(!name){
+    toast("Give it a name first 🙂");
+    newName.focus();
+    return;
+  }
+  const p = {
+    id: makeId(),
+    name,
+    type: newType.value.trim(),
+    date: newDate.value,
+    time: newTime.value,
+    location: newLocation.value.trim(),
+    notes: newNotes.value.trim(),
+    createdAt: nowISO(),
+    updatedAt: nowISO()
+  };
+  parties.unshift(p);
+  saveParties();
+  clearCreateForm();
+  renderList();
+  toast("Party created");
+  openDetails(p.id);
+}
+function openDetails(id){
+  const p = parties.find(x => x.id === id);
+  if(!p){
+    toast("Party not found");
+    return;
+  }
+  activePartyId = id;
+
+  editName.value = p.name || "";
+  editType.value = p.type || "";
+  editDate.value = p.date || "";
+  editTime.value = p.time || "";
+  editLocation.value = p.location || "";
+  editNotes.value = p.notes || "";
+
+  detailIdPill.textContent = id.slice(0, 10) + "…";
+  showDetails();
+}
+
+function saveDetails(){
+  if(!activePartyId) return;
+
+  const idx = parties.findIndex(x => x.id === activePartyId);
+  if(idx === -1){
+    toast("Party not found");
+    showHome();
+    return;
+  }
+
+  const name = editName.value.trim();
+  if(!name){
+    toast("Party name can’t be blank");
+    editName.focus();
+    return;
+  }
+
+  parties[idx] = {
+    ...parties[idx],
+    name,
+    type: editType.value.trim(),
+    date: editDate.value,
+    time: editTime.value,
+    location: editLocation.value.trim(),
+    notes: editNotes.value.trim(),
+    updatedAt: nowISO()
+  };
+
+  saveParties();
+  toast("Saved");
+  // Keep user on details, but list will update when they go back
+}
+
+function deleteParty(){
+  if(!activePartyId) return;
+  const p = parties.find(x => x.id === activePartyId);
+  if(!p) return;
+
+  const ok = confirm(`Delete "${p.name}"?`);
+  if(!ok) return;
+
+  parties = parties.filter(x => x.id !== activePartyId);
+  saveParties();
+  toast("Deleted");
+  showHome();
+}
+
+function resetAll(){
+  const ok = confirm("Reset ALL parties? This will erase everything saved in this app.");
+  if(!ok) return;
+
+  localStorage.removeItem(STORAGE_KEY);
+  parties = [];
+  activePartyId = null;
+  renderList();
+  showHome();
+  toast("All parties reset");
+}
+
+function exportJSON(){
+  const data = JSON.stringify({ version: 2, exportedAt: nowISO(), parties }, null, 2);
+  const blob = new Blob([data], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "partyplus-export.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  URL.revokeObjectURL(url);
+  toast("Exported");
+}
+
+function importJSONFile(file){
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const obj = JSON.parse(reader.result);
+      const imported = obj.parties || obj;
+      if(!Array.isArray(imported)) throw new Error("Invalid file");
+
+      // Merge by id (keep newest updatedAt)
+      const map = new Map(parties.map(p => [p.id, p]));
+      imported.forEach(p => {
+        if(!p || !p.id) return;
+        const existing = map.get(p.id);
+        if(!existing){
+          map.set(p.id, p);
+        }else{
+          const a = existing.updatedAt || existing.createdAt || "";
+          const b = p.updatedAt || p.createdAt || "";
+          if(b > a) map.set(p.id, p);
+        }
+      });
+
+      parties = Array.from(map.values());
+      saveParties();
+      renderList();
+      toast("Imported");
+    }catch(e){
+      alert("That file doesn’t look like a PartyPlus export.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+/* Events */
+$("btnCreate").addEventListener("click", createParty);
+$("btnClearCreate").addEventListener("click", clearCreateForm);
+
+$("btnSave").addEventListener("click", saveDetails);
+$("btnBack").addEventListener("click", showHome);
+$("btnDelete").addEventListener("click", deleteParty);
+
+$("btnResetAll").addEventListener("click", resetAll);
+$("btnGoHome").addEventListener("click", showHome);
+
+searchEl.addEventListener("input", renderList);
+sortEl.addEventListener("change", renderList);
+
+$("btnExport").addEventListener("click", exportJSON);
+$("btnImport").addEventListener("click", () => $("importFile").click());
+$("importFile").addEventListener("change", (e) => {
+  const f = e.target.files && e.target.files[0];
+  if(f) importJSONFile(f);
+  e.target.value = "";
+});
+
+/* Boot */
+loadParties();
+renderList();
+showHome();
+
+/* PWA service worker */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
