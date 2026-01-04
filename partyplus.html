@@ -412,9 +412,10 @@
         <textarea id="editNotes"></textarea>
 
         <div class="btnbar">
-          <button id="btnSave">Save Changes</button>
-          <button class="secondary" id="btnBack">Back to List</button>
-          <button class="danger" id="btnDelete">Delete Party</button>
+  <button id="btnSave">Save Changes</button>
+  <button id="btnShare">Share Party</button>
+  <button class="secondary" id="btnBack">Back to List</button>
+  <button class="danger" id="btnDelete">Delete Party</button>
         </div>
       </div>
     </div>
@@ -685,7 +686,32 @@ function saveDetails(){
   toast("Saved");
   // Keep user on details, but list will update when they go back
 }
+function shareParty(){
+  if(!activePartyId){
+    toast("Open a party first");
+    return;
+  }
 
+  const p = parties.find(x => x.id === activePartyId);
+  if(!p){
+    toast("Party not found");
+    return;
+  }
+
+  const base = window.location.origin + window.location.pathname;
+  const url = `${base}?party=${encodeURIComponent(p.id)}`;
+
+  if(navigator.share){
+    navigator.share({
+      title: p.name || "Party",
+      text: "Join my party on PartyPlus!",
+      url
+    });
+  } else {
+    navigator.clipboard.writeText(url);
+    toast("Link copied to clipboard");
+  }
+}
 function deleteParty(){
   if(!activePartyId) return;
   const p = parties.find(x => x.id === activePartyId);
@@ -764,8 +790,9 @@ function importJSONFile(file){
 /* Events */
 $("btnCreate").addEventListener("click", createParty);
 $("btnClearCreate").addEventListener("click", clearCreateForm);
-
+$("btnShare").addEventListener("click", shareParty);
 $("btnSave").addEventListener("click", saveDetails);
+  
 $("btnBack").addEventListener("click", showHome);
 $("btnDelete").addEventListener("click", deleteParty);
 
@@ -798,3 +825,4 @@ if ("serviceWorker" in navigator) {
 </body>
 
 </html>
+
