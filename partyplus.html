@@ -497,7 +497,18 @@ function loadParties(){
     parties = [];
   }
 }
-
+// Auto-open shared party if URL has ?party=...
+(function autoOpenSharedParty(){
+  try{
+    const params = new URLSearchParams(window.location.search);
+    const sharedId = params.get("party");
+    if(sharedId){
+      setTimeout(() => {
+        if(typeof openParty === "function") openParty(sharedId);
+      }, 0);
+    }
+  }catch(e){}
+})();
 function saveParties(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(parties));
   lastSavedPill.textContent = "Saved";
@@ -835,5 +846,6 @@ if ("serviceWorker" in navigator) {
 </body>
 
 </html>
+
 
 
