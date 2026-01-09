@@ -1,624 +1,640 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PartyPlus</title>
-
-  <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#111827" />
-
   <style>
-    :root{
-      --bg:#0b1220;
-      --card:#101a33;
-      --card2:#0f1730;
-      --text:#e5e7eb;
-      --muted:#9ca3af;
-      --line:rgba(255,255,255,.10);
-      --accent:#60a5fa;
-      --good:#22c55e;
-      --bad:#ef4444;
-      --btn:#1f2a4a;
-      --btn2:#1a2441;
-      --shadow:0 12px 32px rgba(0,0,0,.35);
-      --radius:16px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
+    :root { --pad: 14px; --radius: 14px; }
+    body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1000px 600px at 20% 0%, rgba(96,165,250,.18), transparent 55%),
-                  radial-gradient(900px 700px at 90% 20%, rgba(34,197,94,.12), transparent 55%),
-                  var(--bg);
-      color:var(--text);
+      margin: 0; background: #f6f7fb; color: #111;
     }
-    header{
-      position:sticky; top:0; z-index:10;
-      backdrop-filter: blur(10px);
-      background: rgba(11,18,32,.75);
-      border-bottom:1px solid var(--line);
+    header {
+      background: #111; color: #fff; padding: 16px var(--pad);
+      position: sticky; top: 0; z-index: 10;
     }
-    .wrap{max-width:980px;margin:0 auto;padding:14px 14px}
-    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .title{font-weight:800;letter-spacing:.2px;font-size:18px}
-    .pill{
-      padding:6px 10px;border:1px solid var(--line);border-radius:999px;
-      color:var(--muted);font-size:12px;background:rgba(255,255,255,.04)
+    header h1 { margin: 0; font-size: 18px; letter-spacing: .3px; }
+    main { padding: var(--pad); max-width: 820px; margin: 0 auto; }
+    .card {
+      background: #fff; border-radius: var(--radius);
+      box-shadow: 0 6px 22px rgba(0,0,0,.06);
+      padding: var(--pad); margin: 12px 0;
     }
-    main{max-width:980px;margin:0 auto;padding:16px 14px 80px}
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+    .row { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 720px) { .row.two { grid-template-columns: 1fr 1fr; } }
+    label { font-size: 12px; color: #444; display: block; margin-bottom: 6px; }
+    input, textarea, select, button {
+      width: 100%; box-sizing: border-box;
+      padding: 12px; border-radius: 12px;
+      border: 1px solid #d7dbe7; font-size: 15px;
+      background: #fff;
     }
-    .cardPad{padding:14px}
-    .grid{display:grid;gap:12px}
-    @media(min-width:860px){
-      .grid{grid-template-columns: 360px 1fr; align-items:start}
+    textarea { min-height: 90px; resize: vertical; }
+    button {
+      border: 0; cursor: pointer; font-weight: 650;
+      background: #111; color: #fff;
     }
-    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
-    input, textarea, select{
-      width:100%;
-      padding:12px 12px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,.22);
-      color: var(--text);
-      outline:none;
+    button.secondary { background: #e9ecf6; color: #111; }
+    button.danger { background: #c62828; }
+    .btnRow { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    @media (min-width: 540px) { .btnRow { grid-template-columns: repeat(3, 1fr); } }
+    .pill {
+      display: inline-block; padding: 6px 10px; border-radius: 999px;
+      background: #eef2ff; color: #1a2a7a; font-size: 12px;
+      margin-right: 8px;
     }
-    textarea{min-height:120px;resize:vertical}
-    .btn{
-      appearance:none;border:1px solid var(--line);
-      background: var(--btn);
-      color: var(--text);
-      padding:11px 12px;border-radius:12px;
-      font-weight:700;
-      cursor:pointer;
-      user-select:none;
+    .partyItem {
+      display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
+      padding: 12px; border-radius: 14px; border: 1px solid #e7e9f2;
+      margin: 10px 0; background: #fff;
     }
-    .btn:active{transform:translateY(1px)}
-    .btn.primary{background: linear-gradient(180deg, rgba(96,165,250,.22), rgba(96,165,250,.10)); border-color: rgba(96,165,250,.35)}
-    .btn.good{background: linear-gradient(180deg, rgba(34,197,94,.22), rgba(34,197,94,.10)); border-color: rgba(34,197,94,.35)}
-    .btn.bad{background: linear-gradient(180deg, rgba(239,68,68,.22), rgba(239,68,68,.10)); border-color: rgba(239,68,68,.35)}
-    .btn.ghost{background: rgba(255,255,255,.04)}
-    .btnRow{display:flex;gap:10px;flex-wrap:wrap}
-    .muted{color:var(--muted)}
-    .list{margin:0;padding:0;list-style:none}
-    .item{
-      display:flex;gap:12px;align-items:center;justify-content:space-between;
-      padding:12px 12px;border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-      border-radius:14px;
-      cursor:pointer;
+    .partyItem h3 { margin: 0 0 4px 0; font-size: 16px; }
+    .muted { color: #555; font-size: 13px; }
+    .linkBtn { width: auto; padding: 10px 12px; border-radius: 12px; }
+    .sep { height: 1px; background: #eceef7; margin: 12px 0; }
+    .small { font-size: 12px; color: #666; }
+    .hide { display: none !important; }
+    .toast {
+      position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+      background: rgba(17,17,17,.92); color: #fff; padding: 10px 14px;
+      border-radius: 999px; font-size: 13px; z-index: 9999;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
     }
-    .item:hover{background: rgba(0,0,0,.26)}
-    .itemTitle{font-weight:800}
-    .itemMeta{font-size:12px;color:var(--muted);margin-top:2px}
-    .right{display:flex;gap:8px;align-items:center}
-    .badge{
-      font-size:11px;color:var(--muted);
-      border:1px solid var(--line);
-      padding:5px 8px;border-radius:999px;
-      background: rgba(255,255,255,.04);
-    }
-    .divider{height:1px;background:var(--line);margin:12px 0}
-    .toast{
-      position:fixed; left:50%; bottom:20px; transform:translateX(-50%);
-      background: rgba(0,0,0,.78);
-      border: 1px solid rgba(255,255,255,.18);
-      color: var(--text);
-      padding:10px 12px;border-radius:999px;
-      font-weight:700;font-size:13px;
-      opacity:0; pointer-events:none;
-      transition: opacity .18s ease;
-      max-width:min(92vw, 620px);
-      white-space:nowrap;
-      overflow:hidden;text-overflow:ellipsis;
-    }
-    .toast.show{opacity:1}
-    .small{font-size:12px}
-    .hint{font-size:12px;color:var(--muted);line-height:1.35}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, monospace}
   </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="row" style="justify-content:space-between">
-      <div class="row">
-        <div class="title">PartyPlus</div>
-        <div id="statusPill" class="pill">Ready</div>
-      </div>
-      <div class="row">
-        <button id="homeBtn" class="btn ghost">Home</button>
-        <button id="installBtn" class="btn primary" style="display:none">Install</button>
-      </div>
-    </div>
-  </div>
-</header>
+  <header>
+    <h1>PartyPlus</h1>
+  </header>
 
-<main>
-  <div class="grid">
-    <!-- LEFT: Home -->
+  <main>
+    <!-- HOME -->
     <section id="homeView" class="card">
-      <div class="cardPad">
-        <div class="row" style="justify-content:space-between;align-items:flex-end">
-          <div>
-            <div style="font-weight:900;font-size:16px">Your Parties</div>
-            <div class="hint">Create one, tap to open, then hit <b>Share Party</b>.</div>
-          </div>
-          <div class="badge" id="countBadge">0</div>
+      <div class="row">
+        <div>
+          <span class="pill" id="partyCountPill">0 Parties</span>
+          <span class="pill" id="storagePill">Saved</span>
         </div>
 
-        <div class="divider"></div>
-
-        <label for="newName">Party name</label>
-        <input id="newName" placeholder="e.g., Super Bowl, Birthday, BBQ..." />
-
-        <div class="btnRow" style="margin-top:10px">
-          <button id="createBtn" class="btn good">Create Party</button>
-          <button id="resetAllBtn" class="btn bad">Reset All</button>
+        <div class="btnRow">
+          <button id="createPartyBtn">Create a Party</button>
+          <button class="secondary" id="importBtn">Import</button>
+          <button class="secondary" id="exportBtn">Export</button>
         </div>
 
-        <div class="divider"></div>
+        <div class="sep"></div>
 
-        <label for="search">Search</label>
-        <input id="search" placeholder="Search parties..." />
+        <div>
+          <label for="searchBox">Search parties</label>
+          <input id="searchBox" placeholder="Type to filter..." />
+        </div>
 
-        <label for="sort">Sort</label>
-        <select id="sort">
-          <option value="newest">Newest</option>
-          <option value="oldest">Oldest</option>
-          <option value="name">Name</option>
-        </select>
+        <div id="partyList"></div>
 
-        <div class="divider"></div>
+        <div class="sep"></div>
 
-        <ul id="partyList" class="list" style="display:grid;gap:10px;margin-top:10px"></ul>
-
-        <div class="divider"></div>
-        <div class="hint small">
-          Tip: shared links look like
-          <span class="mono">partyplus.html?party=YOUR_ID</span>.
+        <button class="danger" id="resetBtn">Reset All Parties</button>
+        <div class="small" style="margin-top:10px;">
+          Tip: Use the hosted link (GitHub Pages/Netlify) for sharing to Tiffany.
         </div>
       </div>
     </section>
 
-    <!-- RIGHT: Party -->
-    <section id="partyView" class="card" style="display:none">
-      <div class="cardPad">
-        <div class="row" style="justify-content:space-between">
-          <div>
-            <div id="partyTitle" style="font-weight:950;font-size:18px">Party</div>
-            <div id="partyIdLine" class="hint mono"></div>
-          </div>
-          <div class="btnRow">
-            <button id="shareBtn" class="btn primary">Share Party</button>
-            <button id="deleteBtn" class="btn bad">Delete</button>
-          </div>
+    <!-- CREATE / EDIT -->
+    <section id="editView" class="card hide">
+      <h2 id="editTitle" style="margin:0 0 10px 0; font-size:18px;">Create Party</h2>
+
+      <div class="row two">
+        <div>
+          <label for="pTitle">Party name</label>
+          <input id="pTitle" placeholder="e.g., Ashley’s Birthday" />
         </div>
-
-        <div class="divider"></div>
-
-        <label for="type">Type</label>
-        <input id="type" placeholder="Birthday, Holiday, BBQ..." />
-
-        <div class="row" style="gap:12px">
-          <div style="flex:1">
-            <label for="date">Date</label>
-            <input id="date" type="date" />
-          </div>
-          <div style="flex:1">
-            <label for="time">Time</label>
-            <input id="time" type="time" />
-          </div>
-        </div>
-
-        <label for="location">Location</label>
-        <input id="location" placeholder="Address or place name" />
-
-        <label for="notes">Notes</label>
-        <textarea id="notes" placeholder="Agenda, what to bring, who’s bringing what..."></textarea>
-
-        <div class="btnRow" style="margin-top:10px">
-          <button id="saveBtn" class="btn good">Save</button>
-          <button id="copyLinkBtn" class="btn">Copy Link</button>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="hint">
-          If someone opens your link and the party isn’t found, they’ll see a message.
-          (They won’t get a blank screen.)
+        <div>
+          <label for="pType">Type</label>
+          <select id="pType">
+            <option value="General">General</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Holiday">Holiday</option>
+            <option value="BBQ">BBQ</option>
+            <option value="Game Day">Game Day</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Potluck">Potluck</option>
+          </select>
         </div>
       </div>
+
+      <div class="row two">
+        <div>
+          <label for="pDate">Date</label>
+          <input id="pDate" type="date" />
+        </div>
+        <div>
+          <label for="pTime">Time</label>
+          <input id="pTime" type="time" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="pLocation">Location</label>
+          <input id="pLocation" placeholder="e.g., Clogher HQ / Backyard" />
+        </div>
+        <div>
+          <label for="pNotes">Notes</label>
+          <textarea id="pNotes" placeholder="Anything guests should know..."></textarea>
+        </div>
+      </div>
+
+      <div class="row two">
+        <div>
+          <label for="itemInput">Add item</label>
+          <input id="itemInput" placeholder="e.g., Ice, Plates, Soda..." />
+        </div>
+        <div style="display:flex; gap:10px; align-items:end;">
+          <button class="secondary linkBtn" id="addItemBtn" style="flex:1;">Add Item</button>
+          <button class="secondary linkBtn" id="clearItemsBtn" style="flex:1;">Clear Items</button>
+        </div>
+      </div>
+
+      <div id="itemsList" class="small" style="margin-top:8px;"></div>
+
+      <div class="sep"></div>
+
+      <div class="btnRow">
+        <button id="saveBtn">Save</button>
+        <button class="secondary" id="cancelBtn">Back</button>
+        <button class="danger" id="deleteBtn">Delete</button>
+      </div>
     </section>
-  </div>
-</main>
 
-<div id="toast" class="toast"></div>
+    <!-- DETAILS -->
+    <section id="detailView" class="card hide">
+      <div style="display:flex; justify-content:space-between; align-items:start; gap:10px;">
+        <div>
+          <h2 id="dTitle" style="margin:0 0 6px 0; font-size:18px;"></h2>
+          <div class="muted" id="dMeta"></div>
+        </div>
+        <button class="secondary linkBtn" id="backHomeBtn" style="width:auto;">Home</button>
+      </div>
 
-<script>
-(() => {
-  "use strict";
+      <div class="sep"></div>
 
-  // ====== Storage ======
-  const STORAGE_KEY = "partyplus_v3_parties";
-  const $ = (id) => document.getElementById(id);
+      <div class="row">
+        <div>
+          <div class="pill" id="dType"></div>
+          <div style="height:8px;"></div>
+          <div><strong>Location:</strong> <span id="dLocation"></span></div>
+          <div style="margin-top:8px;"><strong>Notes:</strong></div>
+          <div id="dNotes" class="muted" style="white-space:pre-wrap;"></div>
+        </div>
 
-  // ====== UI ======
-  const statusPill = $("statusPill");
-  const toastEl = $("toast");
+        <div class="sep"></div>
 
-  const homeView = $("homeView");
-  const partyView = $("partyView");
+        <div>
+          <strong>Items:</strong>
+          <div id="dItems" class="muted" style="margin-top:8px;"></div>
+        </div>
 
-  const partyListEl = $("partyList");
-  const countBadge = $("countBadge");
-  const searchEl = $("search");
-  const sortEl = $("sort");
+        <div class="sep"></div>
 
-  const newNameEl = $("newName");
-  const createBtn = $("createBtn");
-  const resetAllBtn = $("resetAllBtn");
-  const homeBtn = $("homeBtn");
+        <div class="btnRow">
+          <button id="editBtn">Edit</button>
+          <button class="secondary" id="shareBtn">Share</button>
+          <button class="secondary" id="copyBtn">Copy Invite Text</button>
+        </div>
 
-  const partyTitle = $("partyTitle");
-  const partyIdLine = $("partyIdLine");
-  const typeEl = $("type");
-  const dateEl = $("date");
-  const timeEl = $("time");
-  const locationEl = $("location");
-  const notesEl = $("notes");
+        <div class="small" id="shareHelp" style="margin-top:10px;"></div>
+      </div>
+    </section>
 
-  const saveBtn = $("saveBtn");
-  const deleteBtn = $("deleteBtn");
-  const shareBtn = $("shareBtn");
-  const copyLinkBtn = $("copyLinkBtn");
+    <input id="filePicker" type="file" accept="application/json" class="hide" />
+  </main>
 
-  // ====== State ======
-  let parties = [];
-  let currentId = null;
-  let installPromptEvent = null;
+  <script>
+    // -------------------------
+    // Stable Core PartyPlus
+    // -------------------------
+    const STORAGE_KEY = "partyplus_parties_v1";
 
-  function setStatus(text) {
-    statusPill.textContent = text;
-  }
+    const $ = (id) => document.getElementById(id);
 
-  function toast(msg) {
-    toastEl.textContent = msg;
-    toastEl.classList.add("show");
-    setTimeout(() => toastEl.classList.remove("show"), 1700);
-  }
-
-  // On-screen crash reporting (prevents "dead buttons" mystery)
-  window.addEventListener("error", (e) => {
-    try { toast("JS error: " + (e.message || "unknown")); } catch(_) {}
-  });
-  window.addEventListener("unhandledrejection", (e) => {
-    try { toast("Promise error: " + (e.reason?.message || e.reason || "unknown")); } catch(_) {}
-  });
-
-  function loadParties() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const parsed = raw ? JSON.parse(raw) : [];
-      parties = Array.isArray(parsed) ? parsed : [];
-    } catch {
-      parties = [];
-    }
-  }
-
-  function saveParties() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(parties));
-    setStatus("Saved");
-    setTimeout(() => setStatus("Ready"), 900);
-  }
-
-  function uid() {
-    // Short but unique enough for this app
-    return "p_" + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(3);
-  }
-
-  function formatMeta(p) {
-    const bits = [];
-    if (p.type) bits.push(p.type);
-    if (p.date) bits.push(p.date);
-    if (p.time) bits.push(p.time);
-    if (p.location) bits.push(p.location);
-    return bits.join(" • ");
-  }
-
-  function getFilteredSorted() {
-    const q = (searchEl.value || "").trim().toLowerCase();
-    let list = parties.slice();
-    if (q) {
-      list = list.filter(p => {
-        const blob = `${p.name||""} ${p.type||""} ${p.location||""} ${p.notes||""}`.toLowerCase();
-        return blob.includes(q);
-      });
-    }
-
-    const sort = sortEl.value;
-    if (sort === "newest") list.sort((a,b) => (b.createdAt||"").localeCompare(a.createdAt||""));
-    else if (sort === "oldest") list.sort((a,b) => (a.createdAt||"").localeCompare(b.createdAt||""));
-    else if (sort === "name") list.sort((a,b) => (a.name||"").localeCompare(b.name||""));
-
-    return list;
-  }
-
-  function renderPartyList() {
-    const list = getFilteredSorted();
-    countBadge.textContent = String(list.length);
-    partyListEl.innerHTML = "";
-
-    if (!list.length) {
-      const li = document.createElement("li");
-      li.className = "hint";
-      li.textContent = "No parties yet. Create one above.";
-      partyListEl.appendChild(li);
-      return;
-    }
-
-    for (const p of list) {
-      const li = document.createElement("li");
-      li.className = "item";
-      li.setAttribute("role","button");
-      li.tabIndex = 0;
-
-      const left = document.createElement("div");
-      const t = document.createElement("div");
-      t.className = "itemTitle";
-      t.textContent = p.name || "(Untitled)";
-      const m = document.createElement("div");
-      m.className = "itemMeta";
-      m.textContent = formatMeta(p) || "Tap to open";
-      left.appendChild(t);
-      left.appendChild(m);
-
-      const right = document.createElement("div");
-      right.className = "right";
-      const b = document.createElement("div");
-      b.className = "badge mono";
-      b.textContent = (p.id || "").slice(-6);
-      right.appendChild(b);
-
-      li.appendChild(left);
-      li.appendChild(right);
-
-      li.addEventListener("click", () => openParty(p.id));
-      li.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") openParty(p.id);
-      });
-
-      partyListEl.appendChild(li);
-    }
-  }
-
-  function showHome() {
-    partyView.style.display = "none";
-    homeView.style.display = "block";
-    currentId = null;
-    history.replaceState(null, "", "./partyplus.html");
-    setStatus("Ready");
-  }
-
-  function showParty() {
-    homeView.style.display = "none";
-    partyView.style.display = "block";
-  }
-
-  function getParty(id) {
-    return parties.find(p => p.id === id) || null;
-  }
-
-  function openParty(id) {
-    const p = getParty(id);
-    if (!p) {
-      toast("Party not found.");
-      showHome();
-      return;
-    }
-    currentId = id;
-
-    partyTitle.textContent = p.name || "Party";
-    partyIdLine.textContent = `ID: ${p.id}`;
-
-    typeEl.value = p.type || "";
-    dateEl.value = p.date || "";
-    timeEl.value = p.time || "";
-    locationEl.value = p.location || "";
-    notesEl.value = p.notes || "";
-
-    // Put the shareable URL in the address bar
-    const url = new URL(window.location.href);
-    url.searchParams.set("party", p.id);
-    history.replaceState(null, "", url.toString());
-
-    showParty();
-  }
-
-  function createParty() {
-    const name = (newNameEl.value || "").trim();
-    if (!name) {
-      toast("Enter a party name.");
-      newNameEl.focus();
-      return;
-    }
-
-    const p = {
-      id: uid(),
-      name,
-      type: "",
-      date: "",
-      time: "",
-      location: "",
-      notes: "",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+    const views = {
+      home: $("homeView"),
+      edit: $("editView"),
+      detail: $("detailView"),
     };
 
-    parties.unshift(p);
-    saveParties();
-    newNameEl.value = "";
-    renderPartyList();
-    toast("Party created");
-    openParty(p.id);
-  }
+    const state = {
+      parties: [],
+      activeId: null,
+      editingId: null,
+      itemsDraft: [],
+    };
 
-  function saveCurrent() {
-    if (!currentId) return;
-    const p = getParty(currentId);
-    if (!p) return;
+    function toast(msg) {
+      const t = document.createElement("div");
+      t.className = "toast";
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 1800);
+    }
 
-    p.type = (typeEl.value || "").trim();
-    p.date = dateEl.value || "";
-    p.time = timeEl.value || "";
-    p.location = (locationEl.value || "").trim();
-    p.notes = (notesEl.value || "").trim();
-    p.updatedAt = new Date().toISOString();
+    function uid() {
+      return "p_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+    }
 
-    saveParties();
-    renderPartyList();
-    toast("Saved");
-  }
+    function safeText(v) {
+      return (v ?? "").toString().trim();
+    }
 
-  function deleteCurrent() {
-    if (!currentId) return;
-    const p = getParty(currentId);
-    if (!p) return;
+    function showView(name) {
+      Object.values(views).forEach(v => v.classList.add("hide"));
+      views[name].classList.remove("hide");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-    if (!confirm(`Delete "${p.name}"?`)) return;
+    function saveToStorage() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.parties));
+      updatePills();
+    }
 
-    parties = parties.filter(x => x.id !== currentId);
-    saveParties();
-    renderPartyList();
-    toast("Deleted");
-    showHome();
-  }
-
-  function shareUrlFor(id) {
-    const url = new URL(window.location.href);
-    url.pathname = url.pathname.replace(/\/[^\/]*$/, "/partyplus.html");
-    url.searchParams.set("party", id);
-    return url.toString();
-  }
-
-  async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      toast("Link copied");
-      return true;
-    } catch {
-      // fallback
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
+    function loadFromStorage() {
       try {
-        document.execCommand("copy");
-        toast("Link copied");
-        return true;
+        const raw = localStorage.getItem(STORAGE_KEY);
+        state.parties = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(state.parties)) state.parties = [];
       } catch {
-        toast("Copy failed");
-        return false;
-      } finally {
+        state.parties = [];
+      }
+
+      // Seed a demo party if empty (helps confirm taps work)
+      if (state.parties.length === 0) {
+        state.parties = [{
+          id: uid(),
+          title: "Chrome Test Party",
+          type: "General",
+          date: "",
+          time: "",
+          location: "",
+          notes: "This is a demo party. Create your own and delete this one when you're ready.",
+          items: ["Ice", "Cups", "Napkins"],
+          createdAt: Date.now()
+        }];
+        saveToStorage();
+      }
+    }
+
+    function updatePills() {
+      $("partyCountPill").textContent = `${state.parties.length} Parties`;
+      $("storagePill").textContent = localStorage.getItem(STORAGE_KEY) ? "Saved" : "Not Saved";
+    }
+
+    function formatDateTime(p) {
+      const d = safeText(p.date);
+      const t = safeText(p.time);
+      if (!d && !t) return "No date/time set";
+      if (d && !t) return d;
+      if (!d && t) return t;
+      return `${d} @ ${t}`;
+    }
+
+    function renderList(filter = "") {
+      const q = safeText(filter).toLowerCase();
+      const list = $("partyList");
+      list.innerHTML = "";
+
+      const sorted = [...state.parties].sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+      const shown = sorted.filter(p => {
+        if (!q) return true;
+        return (
+          safeText(p.title).toLowerCase().includes(q) ||
+          safeText(p.type).toLowerCase().includes(q) ||
+          safeText(p.location).toLowerCase().includes(q)
+        );
+      });
+
+      if (shown.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "muted";
+        empty.textContent = "No parties found.";
+        list.appendChild(empty);
+        return;
+      }
+
+      shown.forEach(p => {
+        const item = document.createElement("div");
+        item.className = "partyItem";
+
+        const left = document.createElement("div");
+        const h = document.createElement("h3");
+        h.textContent = safeText(p.title) || "(Untitled Party)";
+        const m = document.createElement("div");
+        m.className = "muted";
+        m.textContent = `${p.type || "General"} • ${formatDateTime(p)}`;
+        left.appendChild(h);
+        left.appendChild(m);
+
+        const btn = document.createElement("button");
+        btn.className = "secondary linkBtn";
+        btn.textContent = "Open";
+        btn.addEventListener("click", () => openParty(p.id));
+
+        item.appendChild(left);
+        item.appendChild(btn);
+        list.appendChild(item);
+      });
+    }
+
+    function openParty(id) {
+      const p = state.parties.find(x => x.id === id);
+      if (!p) return;
+
+      state.activeId = id;
+
+      $("dTitle").textContent = safeText(p.title) || "(Untitled Party)";
+      $("dMeta").textContent = formatDateTime(p);
+      $("dType").textContent = p.type || "General";
+      $("dLocation").textContent = safeText(p.location) || "—";
+      $("dNotes").textContent = safeText(p.notes) || "—";
+
+      const items = Array.isArray(p.items) ? p.items : [];
+      $("dItems").textContent = items.length ? items.map(x => `• ${x}`).join("\n") : "—";
+
+      // Helpful hint about sharing
+      const base = window.location.href;
+      $("shareHelp").textContent =
+        `Sharing tip: if you're using the hosted link, guests can open PartyPlus at: ${base}`;
+
+      showView("detail");
+    }
+
+    function startCreate() {
+      state.editingId = null;
+      state.itemsDraft = [];
+      $("editTitle").textContent = "Create Party";
+      $("deleteBtn").classList.add("hide");
+
+      $("pTitle").value = "";
+      $("pType").value = "General";
+      $("pDate").value = "";
+      $("pTime").value = "";
+      $("pLocation").value = "";
+      $("pNotes").value = "";
+      $("itemInput").value = "";
+      renderItemsDraft();
+
+      showView("edit");
+    }
+
+    function startEdit(id) {
+      const p = state.parties.find(x => x.id === id);
+      if (!p) return;
+
+      state.editingId = id;
+      $("editTitle").textContent = "Edit Party";
+      $("deleteBtn").classList.remove("hide");
+
+      $("pTitle").value = safeText(p.title);
+      $("pType").value = p.type || "General";
+      $("pDate").value = safeText(p.date);
+      $("pTime").value = safeText(p.time);
+      $("pLocation").value = safeText(p.location);
+      $("pNotes").value = safeText(p.notes);
+
+      state.itemsDraft = Array.isArray(p.items) ? [...p.items] : [];
+      $("itemInput").value = "";
+      renderItemsDraft();
+
+      showView("edit");
+    }
+
+    function renderItemsDraft() {
+      const box = $("itemsList");
+      if (state.itemsDraft.length === 0) {
+        box.textContent = "No items yet.";
+        return;
+      }
+      box.textContent = state.itemsDraft.map((x,i) => `${i+1}. ${x}`).join("\n");
+    }
+
+    function addItem() {
+      const v = safeText($("itemInput").value);
+      if (!v) return;
+      state.itemsDraft.push(v);
+      $("itemInput").value = "";
+      renderItemsDraft();
+    }
+
+    function clearItems() {
+      state.itemsDraft = [];
+      renderItemsDraft();
+      toast("Items cleared");
+    }
+
+    function upsertParty() {
+      const data = {
+        title: safeText($("pTitle").value),
+        type: $("pType").value || "General",
+        date: safeText($("pDate").value),
+        time: safeText($("pTime").value),
+        location: safeText($("pLocation").value),
+        notes: safeText($("pNotes").value),
+        items: [...state.itemsDraft],
+      };
+
+      // Guard: require a title so we don't create "empty" parties that then share blank
+      if (!data.title) {
+        toast("Give it a party name first");
+        $("pTitle").focus();
+        return;
+      }
+
+      if (state.editingId) {
+        const idx = state.parties.findIndex(x => x.id === state.editingId);
+        if (idx >= 0) {
+          state.parties[idx] = { ...state.parties[idx], ...data };
+        }
+      } else {
+        state.parties.unshift({
+          id: uid(),
+          ...data,
+          createdAt: Date.now()
+        });
+      }
+
+      saveToStorage();
+      renderList($("searchBox").value);
+      toast("Saved");
+
+      // Open the party we just saved
+      const openId = state.editingId ? state.editingId : state.parties[0].id;
+      state.editingId = null;
+      openParty(openId);
+    }
+
+    function deleteParty() {
+      if (!state.editingId) return;
+      const id = state.editingId;
+      state.parties = state.parties.filter(p => p.id !== id);
+      state.editingId = null;
+      saveToStorage();
+      renderList($("searchBox").value);
+      toast("Deleted");
+      showView("home");
+    }
+
+    function resetAll() {
+      if (!confirm("Reset ALL parties? This cannot be undone.")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      state.parties = [];
+      loadFromStorage();
+      renderList("");
+      showView("home");
+      toast("Reset done");
+    }
+
+    function inviteTextForParty(p) {
+      const title = safeText(p.title) || "Party";
+      const type = p.type || "General";
+      const when = formatDateTime(p);
+      const where = safeText(p.location) || "—";
+      const notes = safeText(p.notes) || "—";
+      const items = (Array.isArray(p.items) && p.items.length) ? p.items.map(x => `- ${x}`).join("\n") : "- (none yet)";
+      const link = window.location.href;
+
+      return (
+`You're invited: ${title}
+Type: ${type}
+When: ${when}
+Where: ${where}
+
+Notes:
+${notes}
+
+Items:
+${items}
+
+Open PartyPlus here:
+${link}`
+      );
+    }
+
+    async function shareParty() {
+      const p = state.parties.find(x => x.id === state.activeId);
+      if (!p) return;
+
+      const text = inviteTextForParty(p);
+
+      // Web Share API (works great on phones)
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: p.title || "PartyPlus Invite", text, url: window.location.href });
+          toast("Shared");
+          return;
+        } catch {
+          // fall through to copy
+        }
+      }
+
+      await copyText(text);
+      toast("Invite copied");
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        // Fallback
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
         ta.remove();
       }
     }
-  }
 
-  async function shareCurrent() {
-    if (!currentId) return;
-    const p = getParty(currentId);
-    if (!p) return;
+    function exportData() {
+      const data = JSON.stringify(state.parties, null, 2);
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
 
-    const url = shareUrlFor(currentId);
-    const title = `PartyPlus: ${p.name || "Party"}`;
-    const text = `Join my party: ${p.name || "Party"}`;
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "partyplus-backup.json";
+      a.click();
 
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, text, url });
-        toast("Shared");
-        return;
-      } catch {
-        // if user cancels, just ignore
-      }
+      setTimeout(() => URL.revokeObjectURL(url), 800);
+      toast("Exporting backup");
     }
-    await copyText(url);
-  }
 
-  function resetAll() {
-    if (!confirm("Reset ALL parties? This cannot be undone.")) return;
-    parties = [];
-    saveParties();
-    renderPartyList();
-    toast("Reset complete");
-    showHome();
-  }
+    function importData(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          if (!Array.isArray(parsed)) throw new Error("Not an array");
+          // Basic sanitize
+          state.parties = parsed.map(p => ({
+            id: p.id || uid(),
+            title: safeText(p.title),
+            type: p.type || "General",
+            date: safeText(p.date),
+            time: safeText(p.time),
+            location: safeText(p.location),
+            notes: safeText(p.notes),
+            items: Array.isArray(p.items) ? p.items.map(x => safeText(x)).filter(Boolean) : [],
+            createdAt: p.createdAt || Date.now()
+          }));
+          saveToStorage();
+          renderList("");
+          toast("Imported");
+        } catch {
+          alert("Import failed. Make sure you selected a PartyPlus backup JSON file.");
+        }
+      };
+      reader.readAsText(file);
+    }
 
-  // ====== Events ======
-  createBtn.addEventListener("click", createParty);
-  resetAllBtn.addEventListener("click", resetAll);
-  homeBtn.addEventListener("click", showHome);
+    // Wire up UI
+    $("createPartyBtn").addEventListener("click", startCreate);
+    $("cancelBtn").addEventListener("click", () => { showView("home"); });
+    $("saveBtn").addEventListener("click", upsertParty);
+    $("deleteBtn").addEventListener("click", deleteParty);
 
-  searchEl.addEventListener("input", renderPartyList);
-  sortEl.addEventListener("change", renderPartyList);
+    $("editBtn").addEventListener("click", () => startEdit(state.activeId));
+    $("backHomeBtn").addEventListener("click", () => showView("home"));
 
-  saveBtn.addEventListener("click", saveCurrent);
-  deleteBtn.addEventListener("click", deleteCurrent);
-  shareBtn.addEventListener("click", shareCurrent);
-  copyLinkBtn.addEventListener("click", async () => {
-    if (!currentId) return;
-    await copyText(shareUrlFor(currentId));
-  });
+    $("addItemBtn").addEventListener("click", addItem);
+    $("clearItemsBtn").addEventListener("click", clearItems);
 
-  // ====== Auto-open shared party (ONLY ONE block) ======
-  function autoOpenSharedParty() {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const sharedId = params.get("party");
-      if (sharedId) {
-        // Wait for list + handlers to be ready
-        setTimeout(() => openParty(sharedId), 0);
-      }
-    } catch {}
-  }
-
-  // ====== PWA install prompt ======
-  const installBtn = $("installBtn");
-  window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    installPromptEvent = e;
-    installBtn.style.display = "inline-block";
-  });
-  installBtn.addEventListener("click", async () => {
-    if (!installPromptEvent) return;
-    installPromptEvent.prompt();
-    try { await installPromptEvent.userChoice; } catch {}
-    installPromptEvent = null;
-    installBtn.style.display = "none";
-  });
-
-  // ====== Service worker ======
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    $("shareBtn").addEventListener("click", shareParty);
+    $("copyBtn").addEventListener("click", async () => {
+      const p = state.parties.find(x => x.id === state.activeId);
+      if (!p) return;
+      await copyText(inviteTextForParty(p));
+      toast("Invite copied");
     });
-  }
 
-  // ====== Boot ======
-  loadParties();
-  renderPartyList();
-  showHome();
-  autoOpenSharedParty();
+    $("resetBtn").addEventListener("click", resetAll);
 
-})();
-</script>
+    $("searchBox").addEventListener("input", (e) => renderList(e.target.value));
+
+    // Import/Export
+    $("exportBtn").addEventListener("click", exportData);
+    $("importBtn").addEventListener("click", () => $("filePicker").click());
+    $("filePicker").addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) importData(file);
+      e.target.value = "";
+    });
+
+    // Boot
+    loadFromStorage();
+    updatePills();
+    renderList("");
+    showView("home");
+  </script>
 </body>
 </html>
