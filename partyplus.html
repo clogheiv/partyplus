@@ -494,7 +494,59 @@
       toast("Reset done");
     }
 
-    function inviteTextForParty(p) {
+    function encodePartyData(p) {
+  const payload = {
+    title: safeText(p.title),
+    type: p.type || "General",
+    date: safeText(p.date),
+    time: safeText(p.time),
+    location: safeText(p.location),
+    notes: safeText(p.notes),
+    items: Array.isArray(p.items) ? p.items : []
+  };
+
+  const json = JSON.stringify(payload);
+  // base64url (safe for links)
+  const b64 = btoa(unescape(encodeURIComponent(json)))
+    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+
+  return b64;
+}
+
+function shareLinkForParty(p) {
+  const base = `${window.location.origin}${window.location.pathname}`;
+  const d = encodePartyData(p);
+  return `${base}?d=${d}`;
+}
+
+function inviteTextForParty(p) {
+  const title = safeText(p.title) || "Party";
+  const type = p.type || "General";
+  const when = formatDateTime(p);
+  const where = safeText(p.location) || "—";
+  const notes = safeText(p.notes) || "—";
+  const items = (Array.isArray(p.items) && p.items.length)
+    ? p.items.map(x => `- ${x}`).join("\n")
+    : "- (none yet)";
+
+  const link = shareLinkForParty(p);
+
+  return (
+`You're invited: ${title}
+Type: ${type}
+When: ${when}
+Where: ${where}
+
+Notes:
+${notes}
+
+Items:
+${items}
+
+Open PartyPlus here:
+${link}`
+  );
+} {
       const title = safeText(p.title) || "Party";
       const type = p.type || "General";
       const when = formatDateTime(p);
