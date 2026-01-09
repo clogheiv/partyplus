@@ -634,7 +634,20 @@ ${link}`
     loadFromStorage();
     updatePills();
     renderList("");
+    const params = new URLSearchParams(window.location.search);
+const partyId = params.get("party");
+
+if (partyId) {
+  const found = state.parties.find(p => p.id === partyId);
+  if (found) {
+    openParty(partyId);
+  } else {
     showView("home");
+    toast("Party not found on this device");
+  }
+} else {
+  showView("home");
+}
   </script>
 </body>
 </html>
