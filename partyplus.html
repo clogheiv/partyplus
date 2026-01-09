@@ -683,19 +683,47 @@ ${link}`
     });
 
     // Boot
-    loadFromStorage();
-    updatePills();
-    renderList("");
-    const params = new URLSearchParams(window.location.search);
-const partyId = params.get("party");
+loadFromStorage();
+updatePills();
+renderList("");
 
-if (partyId) {
-  const found = state.parties.find(p => p.id === partyId);
-  if (found) {
-    openParty(partyId);
+function decodePartyData(d) {
+  try {
+    const b64 = d.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((d.length + 3) % 4);
+    const json = decodeURIComponent(escape(atob(b64)));
+    const payload = JSON.parse(json);
+
+    return {
+      title: safeText(payload.title),
+      type: payload.type || "General",
+      date: safeText(payload.date),
+      time: safeText(payload.time),
+      location: safeText(payload.location),
+      notes: safeText(payload.notes),
+      items: Array.isArray(payload.items)
+        ? payload.items.map(x => safeText(x)).filter(Boolean)
+        : []
+    };
+  } catch {
+    return null;
+  }
+}
+
+const params = new URLSearchParams(window.location.search);
+const d = params.get("d");
+
+if (d) {
+  const payload = decodePartyData(d);
+  if (payload && payload.title) {
+    const newId = uid();
+    state.parties.unshift({ id: newId, ...payload, createdAt: Date.now() });
+    saveToStorage();
+    renderList("");
+    openParty(newId);
+    toast("Party imported from link");
   } else {
     showView("home");
-    toast("Party not found on this device");
+    toast("Invalid party link");
   }
 } else {
   showView("home");
