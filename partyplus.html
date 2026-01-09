@@ -6,70 +6,41 @@
   <title>PartyPlus</title>
   <style>
     :root { --pad: 14px; --radius: 14px; }
-    body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      margin: 0; background: #f6f7fb; color: #111;
-    }
-    header {
-      background: #111; color: #fff; padding: 16px var(--pad);
-      position: sticky; top: 0; z-index: 10;
-    }
-    header h1 { margin: 0; font-size: 18px; letter-spacing: .3px; }
-    main { padding: var(--pad); max-width: 820px; margin: 0 auto; }
-    .card {
-      background: #fff; border-radius: var(--radius);
-      box-shadow: 0 6px 22px rgba(0,0,0,.06);
-      padding: var(--pad); margin: 12px 0;
-    }
-    .row { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    @media (min-width: 720px) { .row.two { grid-template-columns: 1fr 1fr; } }
-    label { font-size: 12px; color: #444; display: block; margin-bottom: 6px; }
-    input, textarea, select, button {
-      width: 100%; box-sizing: border-box;
-      padding: 12px; border-radius: 12px;
-      border: 1px solid #d7dbe7; font-size: 15px;
-      background: #fff;
-    }
-    textarea { min-height: 90px; resize: vertical; }
-    button {
-      border: 0; cursor: pointer; font-weight: 650;
-      background: #111; color: #fff;
-    }
-    button.secondary { background: #e9ecf6; color: #111; }
-    button.danger { background: #c62828; }
-    .btnRow { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    @media (min-width: 540px) { .btnRow { grid-template-columns: repeat(3, 1fr); } }
-    .pill {
-      display: inline-block; padding: 6px 10px; border-radius: 999px;
-      background: #eef2ff; color: #1a2a7a; font-size: 12px;
-      margin-right: 8px;
-    }
-    .partyItem {
-      display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
-      padding: 12px; border-radius: 14px; border: 1px solid #e7e9f2;
-      margin: 10px 0; background: #fff;
-    }
-    .partyItem h3 { margin: 0 0 4px 0; font-size: 16px; }
-    .muted { color: #555; font-size: 13px; }
-    .linkBtn { width: auto; padding: 10px 12px; border-radius: 12px; }
-    .sep { height: 1px; background: #eceef7; margin: 12px 0; }
-    .small { font-size: 12px; color: #666; }
-    .hide { display: none !important; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; background:#f6f7fb; color:#111; }
+    header { background:#111; color:#fff; padding:16px var(--pad); position:sticky; top:0; z-index:10; }
+    header h1 { margin:0; font-size:18px; letter-spacing:.3px; }
+    main { padding: var(--pad); max-width: 820px; margin:0 auto; }
+    .card { background:#fff; border-radius: var(--radius); box-shadow:0 6px 22px rgba(0,0,0,.06); padding: var(--pad); margin:12px 0; }
+    .row { display:grid; grid-template-columns:1fr; gap:10px; }
+    @media (min-width:720px){ .row.two{ grid-template-columns:1fr 1fr; } }
+    label { font-size:12px; color:#444; display:block; margin-bottom:6px; }
+    input, textarea, select, button { width:100%; box-sizing:border-box; padding:12px; border-radius:12px; border:1px solid #d7dbe7; font-size:15px; background:#fff; }
+    textarea { min-height:90px; resize:vertical; }
+    button { border:0; cursor:pointer; font-weight:650; background:#111; color:#fff; }
+    button.secondary { background:#e9ecf6; color:#111; }
+    button.danger { background:#c62828; }
+    .btnRow { display:grid; grid-template-columns:1fr; gap:10px; }
+    @media (min-width:540px){ .btnRow{ grid-template-columns:repeat(3,1fr); } }
+    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:#eef2ff; color:#1a2a7a; font-size:12px; margin-right:8px; }
+    .partyItem { display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; padding:12px; border-radius:14px; border:1px solid #e7e9f2; margin:10px 0; background:#fff; }
+    .partyItem h3 { margin:0 0 4px 0; font-size:16px; }
+    .muted { color:#555; font-size:13px; }
+    .linkBtn { width:auto; padding:10px 12px; border-radius:12px; }
+    .sep { height:1px; background:#eceef7; margin:12px 0; }
+    .small { font-size:12px; color:#666; }
+    .hide { display:none !important; }
     .toast {
-      position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
-      background: rgba(17,17,17,.92); color: #fff; padding: 10px 14px;
-      border-radius: 999px; font-size: 13px; z-index: 9999;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      background:rgba(17,17,17,.92); color:#fff; padding:10px 14px;
+      border-radius:999px; font-size:13px; z-index:9999;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>PartyPlus</h1>
-  </header>
+  <header><h1>PartyPlus</h1></header>
 
   <main>
-    <!-- HOME -->
     <section id="homeView" class="card">
       <div class="row">
         <div>
@@ -96,12 +67,11 @@
 
         <button class="danger" id="resetBtn">Reset All Parties</button>
         <div class="small" style="margin-top:10px;">
-          Tip: Use the hosted link (GitHub Pages/Netlify) for sharing to Tiffany.
+          Tip: Sharing works by embedding party info in the link (no accounts needed).
         </div>
       </div>
     </section>
 
-    <!-- CREATE / EDIT -->
     <section id="editView" class="card hide">
       <h2 id="editTitle" style="margin:0 0 10px 0; font-size:18px;">Create Party</h2>
 
@@ -168,7 +138,6 @@
       </div>
     </section>
 
-    <!-- DETAILS -->
     <section id="detailView" class="card hide">
       <div style="display:flex; justify-content:space-between; align-items:start; gap:10px;">
         <div>
@@ -193,7 +162,7 @@
 
         <div>
           <strong>Items:</strong>
-          <div id="dItems" class="muted" style="margin-top:8px;"></div>
+          <div id="dItems" class="muted" style="margin-top:8px; white-space:pre-wrap;"></div>
         </div>
 
         <div class="sep"></div>
@@ -212,25 +181,12 @@
   </main>
 
   <script>
-    // -------------------------
-    // Stable Core PartyPlus
-    // -------------------------
     const STORAGE_KEY = "partyplus_parties_v1";
-
     const $ = (id) => document.getElementById(id);
 
-    const views = {
-      home: $("homeView"),
-      edit: $("editView"),
-      detail: $("detailView"),
-    };
+    const views = { home: $("homeView"), edit: $("editView"), detail: $("detailView") };
 
-    const state = {
-      parties: [],
-      activeId: null,
-      editingId: null,
-      itemsDraft: [],
-    };
+    const state = { parties: [], activeId: null, editingId: null, itemsDraft: [] };
 
     function toast(msg) {
       const t = document.createElement("div");
@@ -240,13 +196,8 @@
       setTimeout(() => t.remove(), 1800);
     }
 
-    function uid() {
-      return "p_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
-    }
-
-    function safeText(v) {
-      return (v ?? "").toString().trim();
-    }
+    function uid() { return "p_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16); }
+    function safeText(v) { return (v ?? "").toString().trim(); }
 
     function showView(name) {
       Object.values(views).forEach(v => v.classList.add("hide"));
@@ -268,7 +219,6 @@
         state.parties = [];
       }
 
-      // Seed a demo party if empty (helps confirm taps work)
       if (state.parties.length === 0) {
         state.parties = [{
           id: uid(),
@@ -361,11 +311,7 @@
       const items = Array.isArray(p.items) ? p.items : [];
       $("dItems").textContent = items.length ? items.map(x => `• ${x}`).join("\n") : "—";
 
-      // Helpful hint about sharing
-      const base = window.location.href;
-      $("shareHelp").textContent =
-        `Sharing tip: if you're using the hosted link, guests can open PartyPlus at: ${base}`;
-
+      $("shareHelp").textContent = `Sharing tip: use the Share button to generate a link that imports this party.`;
       showView("detail");
     }
 
@@ -411,10 +357,7 @@
 
     function renderItemsDraft() {
       const box = $("itemsList");
-      if (state.itemsDraft.length === 0) {
-        box.textContent = "No items yet.";
-        return;
-      }
+      if (state.itemsDraft.length === 0) { box.textContent = "No items yet."; return; }
       box.textContent = state.itemsDraft.map((x,i) => `${i+1}. ${x}`).join("\n");
     }
 
@@ -443,31 +386,19 @@
         items: [...state.itemsDraft],
       };
 
-      // Guard: require a title so we don't create "empty" parties that then share blank
-      if (!data.title) {
-        toast("Give it a party name first");
-        $("pTitle").focus();
-        return;
-      }
+      if (!data.title) { toast("Give it a party name first"); $("pTitle").focus(); return; }
 
       if (state.editingId) {
         const idx = state.parties.findIndex(x => x.id === state.editingId);
-        if (idx >= 0) {
-          state.parties[idx] = { ...state.parties[idx], ...data };
-        }
+        if (idx >= 0) state.parties[idx] = { ...state.parties[idx], ...data };
       } else {
-        state.parties.unshift({
-          id: uid(),
-          ...data,
-          createdAt: Date.now()
-        });
+        state.parties.unshift({ id: uid(), ...data, createdAt: Date.now() });
       }
 
       saveToStorage();
       renderList($("searchBox").value);
       toast("Saved");
 
-      // Open the party we just saved
       const openId = state.editingId ? state.editingId : state.parties[0].id;
       state.editingId = null;
       openParty(openId);
@@ -494,116 +425,12 @@
       toast("Reset done");
     }
 
-    function encodePartyData(p) {
-  const payload = {
-    title: safeText(p.title),
-    type: p.type || "General",
-    date: safeText(p.date),
-    time: safeText(p.time),
-    location: safeText(p.location),
-    notes: safeText(p.notes),
-    items: Array.isArray(p.items) ? p.items : []
-  };
-
-  const json = JSON.stringify(payload);
-  // base64url (safe for links)
-  const b64 = btoa(unescape(encodeURIComponent(json)))
-    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
-
-  return b64;
-}
-
-function shareLinkForParty(p) {
-  const base = `${window.location.origin}${window.location.pathname}`;
-  const d = encodePartyData(p);
-  return `${base}?d=${d}`;
-}
-
-function inviteTextForParty(p) {
-  const title = safeText(p.title) || "Party";
-  const type = p.type || "General";
-  const when = formatDateTime(p);
-  const where = safeText(p.location) || "—";
-  const notes = safeText(p.notes) || "—";
-  const items = (Array.isArray(p.items) && p.items.length)
-    ? p.items.map(x => `- ${x}`).join("\n")
-    : "- (none yet)";
-
-  const link = shareLinkForParty(p);
-
-  return (
-`You're invited: ${title}
-Type: ${type}
-When: ${when}
-Where: ${where}
-
-Notes:
-${notes}
-
-Items:
-${items}
-
-Open PartyPlus here:
-${link}`
-  );
-} {
-      const title = safeText(p.title) || "Party";
-      const type = p.type || "General";
-      const when = formatDateTime(p);
-      const where = safeText(p.location) || "—";
-      const notes = safeText(p.notes) || "—";
-      const items = (Array.isArray(p.items) && p.items.length) ? p.items.map(x => `- ${x}`).join("\n") : "- (none yet)";
-      const link = window.location.href;
-
-      return (
-`You're invited: ${title}
-Type: ${type}
-When: ${when}
-Where: ${where}
-
-Notes:
-${notes}
-
-Items:
-${items}
-
-Open PartyPlus here:
-${link}`
-      );
-    }
-
-    async function shareParty() {
-      const p = state.parties.find(x => x.id === state.activeId);
-      if (!p) return;
-
-      const text = inviteTextForParty(p);
-
-      // Web Share API (works great on phones)
-      if (navigator.share) {
-        try {
-          await navigator.share({ title: p.title || "PartyPlus Invite", text, url: window.location.href });
-          toast("Shared");
-          return;
-        } catch {
-          // fall through to copy
-        }
-      }
-
-      await copyText(text);
-      toast("Invite copied");
-    }
-
     async function copyText(text) {
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        // Fallback
+      try { await navigator.clipboard.writeText(text); }
+      catch {
         const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        ta.remove();
+        ta.value = text; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy"); ta.remove();
       }
     }
 
@@ -611,12 +438,8 @@ ${link}`
       const data = JSON.stringify(state.parties, null, 2);
       const blob = new Blob([data], { type: "application/json" });
       const url = URL.createObjectURL(blob);
-
       const a = document.createElement("a");
-      a.href = url;
-      a.download = "partyplus-backup.json";
-      a.click();
-
+      a.href = url; a.download = "partyplus-backup.json"; a.click();
       setTimeout(() => URL.revokeObjectURL(url), 800);
       toast("Exporting backup");
     }
@@ -627,7 +450,6 @@ ${link}`
         try {
           const parsed = JSON.parse(reader.result);
           if (!Array.isArray(parsed)) throw new Error("Not an array");
-          // Basic sanitize
           state.parties = parsed.map(p => ({
             id: p.id || uid(),
             title: safeText(p.title),
@@ -649,9 +471,77 @@ ${link}`
       reader.readAsText(file);
     }
 
+    // --- Share link that imports party data (works across devices) ---
+    function encodePartyData(p) {
+      const payload = {
+        title: safeText(p.title),
+        type: p.type || "General",
+        date: safeText(p.date),
+        time: safeText(p.time),
+        location: safeText(p.location),
+        notes: safeText(p.notes),
+        items: Array.isArray(p.items) ? p.items : []
+      };
+      const json = JSON.stringify(payload);
+      const b64 = btoa(unescape(encodeURIComponent(json)))
+        .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+      return b64;
+    }
+
+    function shareLinkForParty(p) {
+      const base = `${window.location.origin}${window.location.pathname}`;
+      return `${base}?d=${encodePartyData(p)}`;
+    }
+
+    function inviteTextForParty(p) {
+      const title = safeText(p.title) || "Party";
+      const type = p.type || "General";
+      const when = formatDateTime(p);
+      const where = safeText(p.location) || "—";
+      const notes = safeText(p.notes) || "—";
+      const items = (Array.isArray(p.items) && p.items.length) ? p.items.map(x => `- ${x}`).join("\n") : "- (none yet)";
+      const link = shareLinkForParty(p);
+
+      return (
+`You're invited: ${title}
+Type: ${type}
+When: ${when}
+Where: ${where}
+
+Notes:
+${notes}
+
+Items:
+${items}
+
+Open PartyPlus here:
+${link}`
+      );
+    }
+
+    function decodePartyData(d) {
+      try {
+        const b64 = d.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((d.length + 3) % 4);
+        const json = decodeURIComponent(escape(atob(b64)));
+        const payload = JSON.parse(json);
+
+        return {
+          title: safeText(payload.title),
+          type: payload.type || "General",
+          date: safeText(payload.date),
+          time: safeText(payload.time),
+          location: safeText(payload.location),
+          notes: safeText(payload.notes),
+          items: Array.isArray(payload.items) ? payload.items.map(x => safeText(x)).filter(Boolean) : []
+        };
+      } catch {
+        return null;
+      }
+    }
+
     // Wire up UI
     $("createPartyBtn").addEventListener("click", startCreate);
-    $("cancelBtn").addEventListener("click", () => { showView("home"); });
+    $("cancelBtn").addEventListener("click", () => showView("home"));
     $("saveBtn").addEventListener("click", upsertParty);
     $("deleteBtn").addEventListener("click", deleteParty);
 
@@ -661,7 +551,23 @@ ${link}`
     $("addItemBtn").addEventListener("click", addItem);
     $("clearItemsBtn").addEventListener("click", clearItems);
 
-    $("shareBtn").addEventListener("click", shareParty);
+    $("shareBtn").addEventListener("click", async () => {
+      const p = state.parties.find(x => x.id === state.activeId);
+      if (!p) return;
+      const text = inviteTextForParty(p);
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: p.title || "PartyPlus Invite", text, url: shareLinkForParty(p) });
+          toast("Shared");
+          return;
+        } catch {}
+      }
+
+      await copyText(text);
+      toast("Invite copied");
+    });
+
     $("copyBtn").addEventListener("click", async () => {
       const p = state.parties.find(x => x.id === state.activeId);
       if (!p) return;
@@ -670,10 +576,8 @@ ${link}`
     });
 
     $("resetBtn").addEventListener("click", resetAll);
-
     $("searchBox").addEventListener("input", (e) => renderList(e.target.value));
 
-    // Import/Export
     $("exportBtn").addEventListener("click", exportData);
     $("importBtn").addEventListener("click", () => $("filePicker").click());
     $("filePicker").addEventListener("change", (e) => {
@@ -683,51 +587,29 @@ ${link}`
     });
 
     // Boot
-loadFromStorage();
-updatePills();
-renderList("");
-
-function decodePartyData(d) {
-  try {
-    const b64 = d.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((d.length + 3) % 4);
-    const json = decodeURIComponent(escape(atob(b64)));
-    const payload = JSON.parse(json);
-
-    return {
-      title: safeText(payload.title),
-      type: payload.type || "General",
-      date: safeText(payload.date),
-      time: safeText(payload.time),
-      location: safeText(payload.location),
-      notes: safeText(payload.notes),
-      items: Array.isArray(payload.items)
-        ? payload.items.map(x => safeText(x)).filter(Boolean)
-        : []
-    };
-  } catch {
-    return null;
-  }
-}
-
-const params = new URLSearchParams(window.location.search);
-const d = params.get("d");
-
-if (d) {
-  const payload = decodePartyData(d);
-  if (payload && payload.title) {
-    const newId = uid();
-    state.parties.unshift({ id: newId, ...payload, createdAt: Date.now() });
-    saveToStorage();
+    loadFromStorage();
+    updatePills();
     renderList("");
-    openParty(newId);
-    toast("Party imported from link");
-  } else {
-    showView("home");
-    toast("Invalid party link");
-  }
-} else {
-  showView("home");
-}
+
+    const params = new URLSearchParams(window.location.search);
+    const d = params.get("d");
+
+    if (d) {
+      const payload = decodePartyData(d);
+      if (payload && payload.title) {
+        const newId = uid();
+        state.parties.unshift({ id: newId, ...payload, createdAt: Date.now() });
+        saveToStorage();
+        renderList("");
+        openParty(newId);
+        toast("Party imported from link");
+      } else {
+        showView("home");
+        toast("Invalid party link");
+      }
+    } else {
+      showView("home");
+    }
   </script>
 </body>
 </html>
