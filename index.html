@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PartyPlus</title>
+
+  <style>
+    :root{
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --btn:#111827;
+      --btnText:#ffffff;
+      --btn2:#eef2ff;
+      --btn2Text:#111827;
+      --danger:#b91c1c;
+      --shadow: 0 10px 30px rgba(0,0,0,.15);
+      --radius: 20px;
+    }
+
+    /* --- Themes (backgrounds) --- */
+    body.theme-General { background: linear-gradient(180deg,#0f172a,#111827); }
+    body.theme-Game-Day, body.theme-Football { background: linear-gradient(180deg,#b45309,#f59e0b); }
+    body.theme-Birthday { background: linear-gradient(180deg,#7c3aed,#ec4899); }
+    body.theme-BBQ, body.theme-Cookout { background: linear-gradient(180deg,#991b1b,#f97316); }
+    body.theme-Holiday, body.theme-Christmas, body.theme-New-Years { background: linear-gradient(180deg,#065f46,#10b981); }
+    body.theme-Baby-Shower { background: linear-gradient(180deg,#0ea5e9,#a78bfa); }
+    body.theme-Beach, body.theme-Pool { background: linear-gradient(180deg,#0284c7,#22c55e); }
+    body.theme-Wedding { background: linear-gradient(180deg,#1f2937,#f3f4f6); }
+
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      display:flex;
+      justify-content:center;
+      padding:28px 14px;
+      box-sizing:border-box;
+    }
+
+    .app{
+      width:min(520px, 100%);
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:14px;
+      color:#fff;
+    }
+    .brand{
+      font-weight:800;
+      letter-spacing:.3px;
+      font-size:22px;
+    }
+    .small{
+      font-size:12px;
+      opacity:.9;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .pad{ padding:18px; }
+
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .muted{ color:var(--muted); }
+
+    .sep{ height:1px; background:var(--line); margin:14px 0; }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:7px 12px;
+      background:#eef2ff;
+      color:#1f2937;
+      font-weight:600;
+      font-size:13px;
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:14px 14px;
+      font-weight:800;
+      font-size:16px;
+      cursor:pointer;
+    }
+    .btn.primary{
+      background:var(--btn);
+      color:var(--btnText);
+    }
+    .btn.secondary{
+      background:var(--btn2);
+      color:var(--btn2Text);
+    }
+    .btn.danger{
+      background:#fee2e2;
+      color:var(--danger);
+    }
+
+    .btnRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .btnRow .btn{ flex:1; min-width:150px; }
+
+    input, select, textarea{
+      width:100%;
+      box-sizing:border-box;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      font-size:15px;
+      outline:none;
+    }
+    textarea{ min-height:90px; resize:vertical; }
+
+    label{
+      display:block;
+      margin:10px 0 6px;
+      font-weight:700;
+      font-size:13px;
+      color:#111827;
+    }
+
+    ul{
+      margin:8px 0 0 18px;
+      padding:0;
+    }
+
+    .party-icon{
+      font-size:46px;
+      line-height:1;
+      text-align:center;
+      margin:4px 0 8px;
+    }
+
+    .listItem{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 12px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      margin-bottom:10px;
+      cursor:pointer;
+    }
+    .listLeft{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .liEmoji{ font-size:24px; }
+    .liTitle{
+      font-weight:800;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:320px;
+    }
+    .liMeta{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    .hide{ display:none; }
+  </style>
+</head>
+
+<body class="theme-General">
+  <div class="app">
+    <div class="topbar">
+      <div>
+        <div class="brand">PartyPlus</div>
+        <div class="small">Less group-text chaos. More party.</div>
+      </div>
+      <div class="small" id="status"></div>
+    </div>
+
+    <!-- HOME -->
+    <section id="homeView" class="card">
+      <div class="pad">
+        <div class="row">
+          <div>
+            <div style="font-weight:900; font-size:18px;">Your Parties</div>
+            <div class="muted" style="font-size:13px;">Tap one to open.</div>
+          </div>
+          <button class="btn secondary" style="width:auto; padding:10px 14px;" id="newBtn">+ Create</button>
+        </div>
+
+        <div class="sep"></div>
+
+        <div id="partyList"></div>
+
+        <div class="btnRow">
+          <button class="btn secondary" id="resetBtn">Reset All Parties</button>
+        </div>
+
+        <div class="muted" style="font-size:12px; margin-top:10px;">
+          Tip: Use Share to send a link that imports the party on someone else’s phone.
+        </div>
+      </div>
+    </section>
+
+    <!-- FORM -->
+    <section id="formView" class="card hide">
+      <div class="pad">
+        <div class="row">
+          <div style="font-weight:900; font-size:18px;" id="formTitle">Create a Party</div>
+          <button class="btn secondary" style="width:auto; padding:10px 14px;" id="cancelFormBtn">Home</button>
+        </div>
+
+        <label>Title</label>
+        <input id="fTitle" placeholder="Football, Birthday, BBQ..." />
+
+        <label>Date & Time</label>
+        <input id="fWhen" type="datetime-local" />
+
+        <label>Type</label>
+        <select id="fType">
+          <option>General</option>
+          <option>Game Day</option>
+          <option>Football</option>
+          <option>Birthday</option>
+          <option>BBQ</option>
+          <option>Cookout</option>
+          <option>Holiday</option>
+          <option>Christmas</option>
+          <option>New Years</option>
+          <option>Baby Shower</option>
+          <option>Wedding</option>
+          <option>Beach</option>
+          <option>Pool</option>
+        </select>
+
+        <label>Location</label>
+        <input id="fLocation" placeholder="Patio, Mom's house, Park..." />
+
+        <label>Notes</label>
+        <textarea id="fNotes" placeholder="What people should know..."></textarea>
+
+        <label>Items (one per line)</label>
+        <textarea id="fItems" placeholder="Ice&#10;Chips&#10;Plates"></textarea>
+
+        <div class="sep"></div>
+
+        <div class="btnRow">
+          <button class="btn primary" id="saveBtn">Save</button>
+          <button class="btn danger" id="deleteBtn">Delete</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAIL -->
+    <section id="detailView" class="card hide">
+      <div class="pad">
+        <div class="row">
+          <div style="min-width:0;">
+            <div id="dIcon" class="party-icon">🎈</div>
+            <h2 id="dTitle" style="margin:0 0 6px 0; font-size:20px;"></h2>
+            <div id="dMeta" class="muted" style="font-size:13px;"></div>
+          </div>
+          <button class="btn secondary" style="width:auto; padding:10px 14px;" id="backHomeBtn">Home</button>
+        </div>
+
+        <div class="sep"></div>
+
+        <div id="dTypeWrap" style="margin-bottom:10px;">
+          <span class="pill" id="dType"></span>
+        </div>
+
+        <div style="font-weight:900; margin-top:6px;">Location: <span style="font-weight:600;" id="dLocation"></span></div>
+
+        <div style="margin-top:10px;">
+          <div style="font-weight:900;">Notes:</div>
+          <div id="dNotes" class="muted" style="white-space:pre-wrap;"></div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div style="font-weight:900;">Items:</div>
+        <ul id="dItems"></ul>
+
+        <div class="sep"></div>
+
+        <button class="btn primary" id="editBtn">Edit</button>
+        <div style="height:10px;"></div>
+        <button class="btn secondary" id="shareBtn">Share</button>
+        <div style="height:10px;"></div>
+        <button class="btn secondary" id="copyBtn">Copy Invite Text</button>
+
+        <div class="muted" style="font-size:12px; margin-top:10px;">
+          Sharing tip: use the Share button to generate a link that imports this party.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ---------- Helpers ----------
+    const $ = (id) => document.getElementById(id);
+    const safeText = (v) => (v == null ? "" : String(v)).trim();
+    const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+    const iconMap = {
+      "Birthday": "🎂",
+      "Game Day": "🏈",
+      "Football": "🏈",
+      "Baby Shower": "👶",
+      "Wedding": "💍",
+      "BBQ": "🍖",
+      "Cookout": "🔥",
+      "Holiday": "🎁",
+      "Christmas": "🎄",
+      "New Years": "🎉",
+      "Beach": "🏖️",
+      "Pool": "🏊",
+      "General": "🎈"
+    };
+
+    // ---------- State ----------
+    const state = {
+      parties: [],
+      activeId: null
+    };
+
+    const STORAGE_KEY = "partyplus_parties_v2";
+
+    function saveParties(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.parties));
+      setStatus("Saved");
+    }
+
+    function loadParties(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        state.parties = raw ? JSON.parse(raw) : [];
+      }catch(e){
+        state.parties = [];
+      }
+    }
+
+    function setStatus(msg){
+      $("status").textContent = msg || "";
+      if (msg) setTimeout(()=> $("status").textContent = "", 1200);
+    }
+
+    // ---------- Views ----------
+    function show(viewId){
+      $("homeView").classList.add("hide");
+      $("formView").classList.add("hide");
+      $("detailView").classList.add("hide");
+      $(viewId).classList.remove("hide");
+    }
+
+    function showHome(){
+      document.body.className = "theme-General";
+      state.activeId = null;
+      renderList();
+      show("homeView");
+    }
+
+    function showForm(editId){
+      const isEdit = !!editId;
+      $("formTitle").textContent = isEdit ? "Edit Party" : "Create a Party";
+      $("deleteBtn").style.display = isEdit ? "block" : "none";
+
+      let p = null;
+      if (isEdit){
+        p = state.parties.find(x => x.id === editId);
+        if (!p){ showHome(); return; }
+      }
+
+      $("fTitle").value = p ? (p.title || "") : "";
+      $("fWhen").value = p ? (p.when || "") : "";
+      $("fType").value = p ? (p.type || "General") : "General";
+      $("fLocation").value = p ? (p.location || "") : "";
+      $("fNotes").value = p ? (p.notes || "") : "";
+      $("fItems").value = p ? (p.items || []).join("\n") : "";
+
+      state.activeId = isEdit ? editId : null;
+      show("formView");
+    }
+
+    function openParty(id){
+      const p = state.parties.find(x => x.id === id);
+      if (!p) return;
+
+      const type = safeText(p.type) || "General";
+      document.body.className = "theme-" + type.replace(/\s+/g, "-");
+
+      state.activeId = id;
+
+      $("dIcon").textContent = iconMap[type] || "🎈";
+      $("dTitle").textContent = safeText(p.title) || "(Untitled Party)";
+      $("dMeta").textContent = formatWhen(p.when);
+      $("dType").textContent = type;
+
+      $("dLocation").textContent = safeText(p.location) || "—";
+      $("dNotes").textContent = safeText(p.notes) || "—";
+
+      $("dItems").innerHTML = "";
+      (p.items || []).forEach(it => {
+        const li = document.createElement("li");
+        li.textContent = safeText(it);
+        $("dItems").appendChild(li);
+      });
+
+      show("detailView");
+    }
+
+    function formatWhen(whenVal){
+      if (!whenVal) return "";
+      // whenVal is yyyy-mm-ddThh:mm
+      const d = new Date(whenVal);
+      if (isNaN(d.getTime())) return safeText(whenVal);
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const dd = String(d.getDate()).padStart(2,"0");
+      const hh = String(d.getHours()).padStart(2,"0");
+      const min = String(d.getMinutes()).padStart(2,"0");
+      return `${yyyy}-${mm}-${dd} @ ${hh}:${min}`;
+    }
+
+    // ---------- List ----------
+    function renderList(){
+      const list = $("partyList");
+      list.innerHTML = "";
+
+      if (!state.parties.length){
+        const empty = document.createElement("div");
+        empty.className = "muted";
+        empty.style.fontSize = "14px";
+        empty.textContent = "No parties yet. Tap “Create” to start one.";
+        list.appendChild(empty);
+        return;
+      }
+
+      // newest first
+      const sorted = [...state.parties].sort((a,b) => (b.updated||0) - (a.updated||0));
+      sorted.forEach(p => {
+        const type = safeText(p.type) || "General";
+        const item = document.createElement("div");
+        item.className = "listItem";
+        item.onclick = () => openParty(p.id);
+
+        const left = document.createElement("div");
+        left.className = "listLeft";
+
+        const emo = document.createElement("div");
+        emo.className = "liEmoji";
+        emo.textContent = iconMap[type] || "🎈";
+
+        const txt = document.createElement("div");
+        txt.style.minWidth = "0";
+
+        const title = document.createElement("div");
+        title.className = "liTitle";
+        title.textContent = safeText(p.title) || "(Untitled Party)";
+
+        const meta = document.createElement("div");
+        meta.className = "liMeta";
+        meta.textContent = `${type} • ${formatWhen(p.when)}`;
+
+        txt.appendChild(title);
+        txt.appendChild(meta);
+
+        left.appendChild(emo);
+        left.appendChild(txt);
+
+        const chev = document.createElement("div");
+        chev.className = "muted";
+        chev.textContent = "›";
+        chev.style.fontSize = "26px";
+        chev.style.lineHeight = "1";
+
+        item.appendChild(left);
+        item.appendChild(chev);
+        list.appendChild(item);
+      });
+    }
+
+    // ---------- Save/Delete ----------
+    function saveFromForm(){
+      const title = safeText($("fTitle").value);
+      const when = safeText($("fWhen").value);
+      const type = safeText($("fType").value) || "General";
+      const location = safeText($("fLocation").value);
+      const notes = safeText($("fNotes").value);
+
+      const items = safeText($("fItems").value)
+        .split("\n")
+        .map(x => safeText(x))
+        .filter(Boolean);
+
+      if (!title && !when && !location && !notes && !items.length){
+        alert("Give it at least a title or something so we know what this party is 😊");
+        return;
+      }
+
+      const now = Date.now();
+
+      if (state.activeId){
+        const p = state.parties.find(x => x.id === state.activeId);
+        if (!p) return;
+
+        p.title = title;
+        p.when = when;
+        p.type = type;
+        p.location = location;
+        p.notes = notes;
+        p.items = items;
+        p.updated = now;
+
+        saveParties();
+        openParty(p.id);
+      } else {
+        const p = {
+          id: uid(),
+          title, when, type, location, notes, items,
+          created: now,
+          updated: now
+        };
+        state.parties.push(p);
+        saveParties();
+        openParty(p.id);
+      }
+    }
+
+    function deleteActive(){
+      if (!state.activeId) return;
+      const ok = confirm("Delete this party?");
+      if (!ok) return;
+
+      state.parties = state.parties.filter(x => x.id !== state.activeId);
+      saveParties();
+      showHome();
+    }
+
+    function resetAll(){
+      const ok = confirm("Reset ALL parties? This cannot be undone.");
+      if (!ok) return;
+      state.parties = [];
+      saveParties();
+      showHome();
+    }
+
+    // ---------- Share / Import ----------
+    function encodeParty(p){
+      const clean = {
+        title: p.title || "",
+        when: p.when || "",
+        type: p.type || "General",
+        location: p.location || "",
+        notes: p.notes || "",
+        items: p.items || []
+      };
+      const json = JSON.stringify(clean);
+      return btoa(unescape(encodeURIComponent(json)));
+    }
+
+    function decodeParty(token){
+      const json = decodeURIComponent(escape(atob(token)));
+      const obj = JSON.parse(json);
+      obj.items = Array.isArray(obj.items) ? obj.items : [];
+      return obj;
+    }
+
+    function shareActive(){
+      if (!state.activeId) return;
+      const p = state.parties.find(x => x.id === state.activeId);
+      if (!p) return;
+
+      const token = encodeParty(p);
+      const url = new URL(window.location.href);
+      url.searchParams.set("import", token);
+
+      const shareText = `PartyPlus invite: ${p.title || "Party"}\n${url.toString()}`;
+
+      if (navigator.share){
+        navigator.share({ title: "PartyPlus", text: shareText, url: url.toString() })
+          .catch(()=>{ /* user canceled */ });
+      } else {
+        navigator.clipboard?.writeText(shareText);
+        alert("Share link copied to clipboard!");
+      }
+    }
+
+    function copyInvite(){
+      if (!state.activeId) return;
+      const p = state.parties.find(x => x.id === state.activeId);
+      if (!p) return;
+
+      const items = (p.items || []).map(x => `• ${x}`).join("\n");
+      const text =
+`You're invited: ${p.title || "Party"}
+When: ${formatWhen(p.when)}
+Type: ${p.type || "General"}
+Where: ${p.location || "—"}
+
+Notes:
+${p.notes || "—"}
+
+Items:
+${items || "—"}`;
+
+      navigator.clipboard?.writeText(text);
+      alert("Invite text copied!");
+    }
+
+    function tryImportFromUrl(){
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get("import");
+      if (!token) return;
+
+      try{
+        const obj = decodeParty(token);
+        const now = Date.now();
+        const p = {
+          id: uid(),
+          title: safeText(obj.title),
+          when: safeText(obj.when),
+          type: safeText(obj.type) || "General",
+          location: safeText(obj.location),
+          notes: safeText(obj.notes),
+          items: (obj.items || []).map(safeText).filter(Boolean),
+          created: now,
+          updated: now
+        };
+
+        state.parties.push(p);
+        saveParties();
+
+        // clean URL (remove import token)
+        const url = new URL(window.location.href);
+        url.searchParams.delete("import");
+        window.history.replaceState({}, "", url.toString());
+
+        alert("Party imported!");
+        openParty(p.id);
+      }catch(e){
+        alert("That invite link didn’t import correctly.");
+      }
+    }
+
+    // ---------- Wire Buttons ----------
+    $("newBtn").onclick = () => showForm(null);
+    $("resetBtn").onclick = () => resetAll();
+
+    $("cancelFormBtn").onclick = () => showHome();
+    $("saveBtn").onclick = () => saveFromForm();
+    $("deleteBtn").onclick = () => deleteActive();
+
+    $("backHomeBtn").onclick = () => showHome();
+    $("editBtn").onclick = () => showForm(state.activeId);
+    $("shareBtn").onclick = () => shareActive();
+    $("copyBtn").onclick = () => copyInvite();
+
+    // ---------- Boot ----------
+    loadParties();
+    tryImportFromUrl();
+    showHome();
+  </script>
+</body>
+</html>
