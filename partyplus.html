@@ -309,7 +309,7 @@
     function openParty(id) {
       const p = state.parties.find(x => x.id === id);
       if (!p) return;
-
+document.body.className = "theme-" + (p.type || "General").replace(/\s+/g, "-");
       state.activeId = id;
 
       $("dTitle").textContent = safeText(p.title) || "(Untitled Party)";
