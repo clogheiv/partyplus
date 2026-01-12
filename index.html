@@ -380,7 +380,8 @@
       document.body.className = "theme-General";
       state.activeId = null;
       renderList();
-      show("homeView");
+    $("formView").classList.add("hide");
+$("homeView").classList.remove("hide");
     }
 
     function showForm(editId){
@@ -679,10 +680,12 @@ ${items || "—"}`;
     $("shareBtn").onclick = () => shareActive();
     $("copyBtn").onclick = () => copyInvite();
 
-    // ---------- Boot ----------
-    loadParties();
-    tryImportFromUrl();
-    showHome();
+    // -------- Boot --------
+window.addEventListener("load", () => {
+  loadParties();
+  tryImportFromUrl();
+  showHome();
+});
   </script>
 </body>
 </html>
