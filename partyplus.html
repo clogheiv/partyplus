@@ -680,9 +680,11 @@ ${items || "—"}`;
     $("copyBtn").onclick = () => copyInvite();
 
     // ---------- Boot ----------
-    loadParties();
-    tryImportFromUrl();
-    showHome();
+   window.addEventListener("load", () => {
+  loadParties();
+  tryImportFromUrl();
+  showHome();
+});
   </script>
 </body>
 </html>
