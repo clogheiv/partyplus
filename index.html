@@ -659,11 +659,22 @@ function copyInviteLink(){
 }
     function openInMaps(){
   const el = $("dLocation");
-  if (!el || !el.textContent) return;
+  if (!el || !el.textContent.trim()) return;
 
-  const addr = encodeURIComponent(el.textContent);
-  const url = `https://www.google.com/maps/search/?api=1&query=${addr}`;
-  window.open(url, "_blank");
+  const addr = encodeURIComponent(el.textContent.trim());
+
+  // Google Maps web (works everywhere)
+  const googleUrl = `https://www.google.com/maps/search/?api=1&query=${addr}`;
+
+  // Apple Maps fallback (iOS users)
+  const appleUrl = `https://maps.apple.com/?q=${addr}`;
+
+  // Try Google first, fallback to Apple
+  const win = window.open(googleUrl, "_blank");
+
+  if (!win){
+    window.location.href = appleUrl;
+  }
     }
 
     function tryImportFromUrl(){
