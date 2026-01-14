@@ -311,6 +311,8 @@
         <button class="btn secondary" id="shareBtn">Share</button>
         <div style="height:10px;"></div>
         <button class="btn secondary" id="copyBtn">Copy Invite Text</button>
+        <div style="height:10px;"></div>
+<button class="btn secondary" id="copyLinkBtn">Copy Invite Link</button>
 
         <div class="muted" style="font-size:12px; margin-top:10px;">
           Sharing tip: use the Share button to generate a link that imports this party.
@@ -595,46 +597,58 @@ $("homeView").classList.remove("hide");
     }
 
     function shareActive(){
-      if (!state.activeId) return;
-      const p = state.parties.find(x => x.id === state.activeId);
-      if (!p) return;
+  if (!state.activeId) return;
+  const p = state.parties.find(x => x.id === state.activeId);
+  if (!p) return;
 
-      const token = encodeParty(p);
-      const url = new URL(window.location.href);
-      url.searchParams.set("import", token);
+  const token = encodeParty(p);
+  const url = new URL(window.location.href);
+  url.searchParams.set("import", token);
 
-      const shareText = `PartyPlus invite: ${p.title || "Party"}\n${url.toString()}`;
+  const shareText = `PartyPlus invite: ${p.title || "Party"}\n${url.toString()}`;
 
-      if (navigator.share){
-        navigator.share({ title: "PartyPlus", text: shareText, url: url.toString() })
-          .catch(()=>{ /* user canceled */ });
-      } else {
-        navigator.clipboard?.writeText(shareText);
-        alert("Share link copied to clipboard!");
-      }
-    }
+  if (navigator.share){
+    navigator.share({ title: "PartyPlus", text: shareText, url: url.toString() })
+      .catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url.toString());
+    alert("Share link copied to clipboard!");
+  }
+}
 
-    function copyInvite(){
-      if (!state.activeId) return;
-      const p = state.parties.find(x => x.id === state.activeId);
-      if (!p) return;
+function copyInvite(){
+  if (!state.activeId) return;
+  const p = state.parties.find(x => x.id === state.activeId);
+  if (!p) return;
 
-      const items = (p.items || []).map(x => `• ${x}`).join("\n");
-      const text =
+  const items = (p.items || []).map(x => `• ${x}`).join("\n");
+
+  const text =
 `You're invited: ${p.title || "Party"}
 When: ${formatWhen(p.when)}
 Type: ${p.type || "General"}
-Where: ${p.location || "—"}
+Where: ${p.location || ""}
+Notes: ${p.notes || ""}
+Bring:
+${items}`;
 
-Notes:
-${p.notes || "—"}
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Invite text copied!");
+  });
+}
 
-Items:
-${items || "—"}`;
+function copyInviteLink(){
+  if (!state.activeId) return;
+  const p = state.parties.find(x => x.id === state.activeId);
+  if (!p) return;
 
-      navigator.clipboard?.writeText(text);
-      alert("Invite text copied!");
-    }
+  const token = encodeParty(p);
+  const link = `${location.origin}${location.pathname}?import=${token}`;
+
+  navigator.clipboard.writeText(link).then(() => {
+    alert("Invite link copied!");
+  });
+}
 
     function tryImportFromUrl(){
       const params = new URLSearchParams(window.location.search);
@@ -660,7 +674,7 @@ ${items || "—"}`;
         saveParties();
 
         // clean URL (remove import token)
-        const url = new URL(window.location.href);
+indow.location.href);
         url.searchParams.delete("import");
         window.history.replaceState({}, "", url.toString());
 
