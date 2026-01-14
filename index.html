@@ -674,9 +674,9 @@ function copyInviteLink(){
         saveParties();
 
         // clean URL (remove import token)
-indow.location.href);
-        url.searchParams.delete("import");
-        window.history.replaceState({}, "", url.toString());
+        const url = new URL(window.location.href);
+url.searchParams.delete("import");
+window.history.replaceState({}, "", url.toString());
 
         alert("Party imported!");
         openParty(p.id);
