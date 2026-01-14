@@ -430,6 +430,10 @@ $("homeView").classList.remove("hide");
       $("dType").textContent = type;
 
       $("dLocation").textContent = safeText(p.location) || "—";
+      const mapsBtn = $("mapsBtn");
+if (mapsBtn){
+  mapsBtn.style.display = p.location ? "block" : "none";
+}
       $("dNotes").textContent = safeText(p.notes) || "—";
 
       $("dItems").innerHTML = "";
