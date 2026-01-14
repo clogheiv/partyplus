@@ -652,6 +652,14 @@ function copyInviteLink(){
     alert("Invite link copied!");
   });
 }
+    function openInMaps(){
+  const el = $("dLocation");
+  if (!el || !el.textContent) return;
+
+  const addr = encodeURIComponent(el.textContent);
+  const url = `https://www.google.com/maps/search/?api=1&query=${addr}`;
+  window.open(url, "_blank");
+    }
 
     function tryImportFromUrl(){
       const params = new URLSearchParams(window.location.search);
