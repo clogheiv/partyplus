@@ -424,19 +424,7 @@ $("homeView").classList.remove("hide");
     }
 // ---------- RSVP ----------
 function updateRsvpUI(p){
-  function setRsvp(choice){
-  if (!state.activeId) return;
-
-  const p = state.parties.find(x => x.id === state.activeId);
-  if (!p) return;
-
-  p.rsvp = choice;
-  p.updated = Date.now();
-
-  saveParties();
-  updateRsvpUI(p);
-}
-  const box = $("rsvpBox");
+const box = $("rsvpBox");
   if (!box) return;
 
   // Only show on detail view when a party is open
@@ -449,8 +437,13 @@ function updateRsvpUI(p){
   const no  = $("rsvpNo");
 
   // Highlight the selected choice
-  if (yes) yes.className = "btn " + ((p && p.rsvp === "yes") ? "primary" : "secondary");
-  if (no)  no.className  = "btn " + ((p && p.rsvp === "no")  ? "primary" : "secondary");
+  if (yes) {
+  yes.className = "btn " + ((p && p.rsvp === "yes") ? "primary" : "secondary");
+}
+
+if (no) {
+  no.className = "btn " + ((p && p.rsvp === "no") ? "primary" : "secondary");
+}
 }
 
 function setRsvp(val){
