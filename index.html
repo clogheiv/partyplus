@@ -681,20 +681,30 @@ ${itemsText}
 ${url.toString()}`;
 
   if (navigator.share) {
-    navigator.share({
-      title: `PartyPlus: ${title}`,
-      text: shareText
-    }).catch(() => {
-      navigator.clipboard?.writeText(shareText);
-      alert("Invite copied. Paste it in a text message.");
-    });
-  } else {
-    // Fallback: copy full text
+  navigator.share({
+    title: `PartyPlus: ${title}`,
+    text: `🎉 ${title}
+${type}${when ? " • " + when : ""}
+
+${location ? "📍 " + location : ""}
+
+${notes ? "📝 " + notes : ""}
+
+🧺 Items:
+${itemsText}
+
+📲 Tap the link below to open this party`,
+    url: url.toString()
+  }).catch(() => {
     navigator.clipboard?.writeText(shareText);
     alert("Invite copied. Paste it in a text message.");
+  });
+} else {
+  // Fallback: copy full text
+  navigator.clipboard?.writeText(shareText);
+  alert("Invite copied. Paste it in a text message.");
   }
     }
-}
 
 function copyInvite(){
   if (!state.activeId) return;
