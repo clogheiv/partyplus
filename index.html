@@ -763,7 +763,8 @@ window.history.replaceState({}, "", url.toString());
     $("copyBtn").onclick = () => copyInvite();
     $("copyLinkBtn").onclick = () => copyInviteLink();
     $("mapsBtn").onclick = () => openInMaps();
-    
+    $("rsvpYes").onclick = () => setRsvp("yes");
+$("rsvpNo").onclick  = () => setRsvp("no");
 
     // -------- Boot --------
 window.addEventListener("load", () => {
