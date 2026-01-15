@@ -333,6 +333,12 @@
   </div>
 
   <script>
+    window.addEventListener("error", (e) => {
+  alert("JS Error: " + e.message);
+});
+window.addEventListener("unhandledrejection", (e) => {
+  alert("Promise Error: " + (e.reason?.message || e.reason));
+});
     // ---------- Helpers ----------
     const $ = (id) => {
   const el = document.getElementById(id);
@@ -687,20 +693,16 @@ ${url.toString()}`;
 ${type}${when ? " • " + when : ""}
 
 ${location ? "📍 " + location : ""}
-
 ${notes ? "📝 " + notes : ""}
 
 🧺 Items:
-${itemsText}
-
-📲 Tap the link below to open this party`,
+${itemsText}`,
     url: url.toString()
   }).catch(() => {
     navigator.clipboard?.writeText(shareText);
     alert("Invite copied. Paste it in a text message.");
   });
 } else {
-  // Fallback: copy full text
   navigator.clipboard?.writeText(shareText);
   alert("Invite copied. Paste it in a text message.");
   }
