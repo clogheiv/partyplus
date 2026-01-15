@@ -422,7 +422,36 @@ $("homeView").classList.remove("hide");
       state.activeId = isEdit ? editId : null;
       show("formView");
     }
+// ---------- RSVP ----------
+function updateRsvpUI(p){
+  const box = $("rsvpBox");
+  if (!box) return;
 
+  // Only show on detail view when a party is open
+  box.style.display = p ? "block" : "none";
+
+  const count = $("rsvpCount");
+  if (count) count.textContent = (p && p.rsvp === "yes") ? "1" : "0";
+
+  const yes = $("rsvpYes");
+  const no  = $("rsvpNo");
+
+  // Highlight the selected choice
+  if (yes) yes.className = "btn " + ((p && p.rsvp === "yes") ? "primary" : "secondary");
+  if (no)  no.className  = "btn " + ((p && p.rsvp === "no")  ? "primary" : "secondary");
+}
+
+function setRsvp(val){
+  if (!state.activeId) return;
+  const p = state.parties.find(x => x.id === state.activeId);
+  if (!p) return;
+
+  p.rsvp = val;              // "yes" or "no"
+  p.updated = Date.now();
+
+  saveParties();
+  updateRsvpUI(p);
+}
     function openParty(id){
       const p = state.parties.find(x => x.id === id);
       if (!p) return;
@@ -438,6 +467,7 @@ $("homeView").classList.remove("hide");
       $("dType").textContent = type;
 
       $("dLocation").textContent = safeText(p.location) || "—";
+      updateRsvpUI(p);
       const mapsBtn = $("mapsBtn");
 if (mapsBtn){
   mapsBtn.style.display = p.location ? "block" : "none";
