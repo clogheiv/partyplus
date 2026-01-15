@@ -649,22 +649,51 @@ if (mapsBtn){
 
     function shareActive(){
   if (!state.activeId) return;
+
   const p = state.parties.find(x => x.id === state.activeId);
   if (!p) return;
 
+  // Build import link using your existing encodeParty()
   const token = encodeParty(p);
   const url = new URL(window.location.href);
   url.searchParams.set("import", token);
 
-  const shareText = `PartyPlus invite: ${p.title || "Party"}\n${url.toString()}`;
+  const title = safeText(p.title) || "Party";
+  const when = formatWhen(p.when) || "";
+  const type = safeText(p.type) || "General";
+  const location = safeText(p.location) || "";
+  const notes = safeText(p.notes) || "";
+  const itemsArr = (p.items || []).map(safeText).filter(Boolean);
+  const itemsText = itemsArr.length ? itemsArr.map(i => `• ${i}`).join("\n") : "• (none yet)";
 
-  if (navigator.share){
-    navigator.share({ title: "PartyPlus", text: shareText, url: url.toString() })
-      .catch(() => {});
+  const shareText =
+`🎉 ${title}
+${type}${when ? " • " + when : ""}
+
+${location ? "📍 " + location : ""}
+
+${notes ? "📝 " + notes : ""}
+
+🧺 Items:
+${itemsText}
+
+📲 Open this party:
+${url.toString()}`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: `PartyPlus: ${title}`,
+      text: shareText
+    }).catch(() => {
+      navigator.clipboard?.writeText(shareText);
+      alert("Invite copied. Paste it in a text message.");
+    });
   } else {
-    navigator.clipboard.writeText(url.toString());
-    alert("Share link copied to clipboard!");
+    // Fallback: copy full text
+    navigator.clipboard?.writeText(shareText);
+    alert("Invite copied. Paste it in a text message.");
   }
+    }
 }
 
 function copyInvite(){
