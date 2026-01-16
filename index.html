@@ -609,7 +609,7 @@ if (mapsBtn){
         p.type = type;
         p.location = location;
         p.notes = notes;
-        p.items = items;
+        p.items = normalizeItems(items).filter(it => it.text);
         p.updated = now;
 
         saveParties();
@@ -617,7 +617,8 @@ if (mapsBtn){
       } else {
         const p = {
           id: uid(),
-          title, when, type, location, notes, items,
+          title, when, type, location, notes,
+items: normalizeItems(items).filter(it => it.text),
           created: now,
           updated: now
         };
