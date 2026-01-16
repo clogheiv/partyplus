@@ -321,13 +321,14 @@
         <div style="height:10px;"></div>
         <button class="btn secondary" id="shareBtn">Share</button>
         <div style="height:10px;"></div>
-
 <div style="height:10px;"></div>
 <button class="btn secondary" id="moreOptionsBtn">More Options</button>
         
-        <button class="btn secondary" id="copyBtn">Copy Invite Text</button>
-        <div style="height:10px;"></div>
-<button class="btn secondary" id="copyLinkBtn">Copy Invite Link</button>
+        <div id="moreOptionsPanel" style="display:none;">
+  <button class="btn secondary" id="copyBtn">Copy Invite Text</button>
+  <div style="height:10px;"></div>
+  <button class="btn secondary" id="copyLinkBtn">Copy Invite Link</button>
+        </div>
 
         <div class="muted" style="font-size:12px; margin-top:10px;">
           Sharing tip: use the Share button to generate a link that imports this party.
@@ -810,6 +811,10 @@ window.history.replaceState({}, "", url.toString());
     $("deleteBtn").onclick = () => deleteActive();
 
     $("backHomeBtn").onclick = () => showHome();
+    $("moreOptionsBtn").onclick = () => {
+  const panel = $("moreOptionsPanel");
+  panel.style.display = panel.style.display === "none" ? "block" : "none";
+};
     $("editBtn").onclick = () => showForm(state.activeId);
     $("shareBtn").onclick = () => shareActive();
     $("copyBtn").onclick = () => copyInvite();
