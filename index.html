@@ -351,6 +351,14 @@ window.addEventListener("unhandledrejection", (e) => {
   return el;
 };
     const safeText = (v) => (v == null ? "" : String(v)).trim();
+    const normalizeItems = (items) =>
+  (items || []).map(it => {
+    if (typeof it === "string") return { text: it, claimedBy: "" };
+    return { text: safeText(it.text), claimedBy: safeText(it.claimedBy) };
+  });
+
+const itemLabel = (it) =>
+  it.claimedBy ? `${it.text} — ${it.claimedBy}` : it.text;
     const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
 
     const iconMap = {
