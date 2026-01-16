@@ -502,7 +502,8 @@ if (mapsBtn){
       $("dItems").innerHTML = "";
       (p.items || []).forEach(it => {
         const li = document.createElement("li");
-        li.textContent = safeText(it);
+        li.textContent = itemLabel(it);
+        li.onclick = () => { toggleClaim(it); saveParties(); openParty(state.activeId); };
         $("dItems").appendChild(li);
       });
 
