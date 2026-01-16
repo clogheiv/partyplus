@@ -531,7 +531,12 @@ if (it.claimedBy) {
 
   li.appendChild(badge);
 }
-        li.onclick = () => { toggleClaim(it); saveParties(); openParty(state.activeId); };
+        li.onclick = () => {
+  hapticTap();        // 👈 ADD THIS LINE
+  toggleClaim(it);
+  saveParties();
+  openParty(state.activeId);
+};
         $("dItems").appendChild(li);
       });
 
