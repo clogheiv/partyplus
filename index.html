@@ -672,19 +672,20 @@ if (mapsBtn){
   const itemsArr = (p.items || []).map(safeText).filter(Boolean);
   const itemsText = itemsArr.length ? itemsArr.map(i => `• ${i}`).join("\n") : "• (none yet)";
 
-  const shareText =
-`🎉 ${title}
+  const shareText = `
+🎉 ${title}
 ${type}${when ? " • " + when : ""}
 
-${location ? "📍 " + location : ""}
+📍 ${location ? location : ""}
 
-${notes ? "📝 " + notes : ""}
+📝 ${notes ? notes : ""}
 
 🧺 Items:
 ${itemsText}
 
 📲 Open this party:
 https://clogheiv.github.io/partyplus/
+`;
 
   if (navigator.share) {
   navigator.share({
