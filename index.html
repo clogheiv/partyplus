@@ -481,7 +481,8 @@
       $("dIcon").textContent = iconMap[type] || "🎈";
       $("dTitle").textContent = safeText(p.title) || "Untitled Party";
       $("dMeta").textContent = formatWhen(p.when);
-      $("dType").textContent = type;
+      $("dType").textContent = (type === "__custom__" ? safeText(p.typeCustom) : type);
+
 
       $("dLocation").textContent = safeText(p.location) || "—";
       $("mapsBtn").style.display = p.location ? "block" : "none";
@@ -603,6 +604,10 @@ li.onkeydown = (e) => {
         p.title = title;
         p.when = when;
         p.type = type;
+        p.typeCustom = type === "__custom__"
+  ? safeText($("fTypeCustom").value)
+  : "";
+
         p.location = location;
         p.notes = notes;
         // keep claims if possible by matching text
