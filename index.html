@@ -555,7 +555,7 @@ li.onkeydown = (e) => {
         if (!p) return;
         $("fTitle").value = safeText(p.title);
         $("fWhen").value = safeText(p.when);
-        $("fType").value = safeText(p.type) || "General";
+        $("fType").value = safeText(p.type) || "Custom";
         $("fLocation").value = safeText(p.location);
         $("fNotes").value = safeText(p.notes);
         $("fItems").value = normalizeItems(p.items).map(x => x.text).join("\n");
@@ -563,7 +563,7 @@ li.onkeydown = (e) => {
         state.activeId = null;
         $("fTitle").value = "";
         $("fWhen").value = "";
-        $("fType").value = "General";
+        $("fType").value = "Custom";
         $("fLocation").value = "";
         $("fNotes").value = "";
         $("fItems").value = "";
