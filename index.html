@@ -703,6 +703,8 @@ li.onkeydown = (e) => {
 
     // ---------- Wire up ----------
     document.addEventListener("DOMContentLoaded", () => {
+      console.log("DOM LOADED");
+
       loadParties();
       importFromUrlIfPresent();
       renderList();
