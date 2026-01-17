@@ -357,6 +357,11 @@ window.addEventListener("unhandledrejection", (e) => {
     function hapticTap(ms = 20){
   if (navigator.vibrate) navigator.vibrate(ms);
     }
+    function tapFlash(el) {
+  if (!el) return;
+  el.style.transform = "scale(0.98)";
+  setTimeout(() => { el.style.transform = ""; }, 90);
+    }
     const normalizeItems = (items) =>
   (items || []).map(it => {
     if (typeof it === "string") return { text: it, claimedBy: "" };
@@ -533,8 +538,9 @@ if (it.claimedBy) {
   li.appendChild(badge);
 }
         li.onclick = () => {
-  hapticTap();        // 👈 ADD THIS LINE
+  tapFlash(li);
   toggleClaim(it);
+  hapticTap();
   saveParties();
   openParty(state.activeId);
 };
