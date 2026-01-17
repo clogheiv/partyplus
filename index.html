@@ -673,7 +673,8 @@ li.onkeydown = (e) => {
       const when = formatWhen(p.when);
       const where = safeText(p.location) ? `\n📍 ${safeText(p.location)}` : "";
       const link = buildShareLink(p);
-      return `You're invited: ${title}\n🗓️ ${when}${where}\n\nOpen this link to import:\n${link}`;
+     return `🎉 ${title}\n🗓️ ${when}${where}\n\nTap to open in PartyPlus:\n ${link}`;
+
     }
 
     async function shareParty(){
