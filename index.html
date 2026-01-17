@@ -394,6 +394,18 @@
   return `${location.origin}${location.pathname}#${p.id}`;
 }
 
+    function openFromHashIfPresent(){
+  const id = (location.hash || "").replace("#","").trim();
+  if (!id) return false;
+
+  const p = state.parties.find(x => x.id === id);
+  if (p) {
+    openParty(id);
+    return true;
+  }
+  return false;
+}
+
     function importFromUrlIfPresent(){
       const url = new URL(window.location.href);
       const encoded = url.searchParams.get("p");
@@ -714,12 +726,15 @@ li.onkeydown = (e) => {
 
     // ---------- Wire up ----------
     document.addEventListener("DOMContentLoaded", () => {
-      console.log("DOM LOADED");
+  loadParties();
 
-      loadParties();
-      importFromUrlIfPresent();
-      renderList();
-      show("homeView");
+  if (!openFromHashIfPresent()) {
+    importFromUrlIfPresent();
+  }
+
+  renderList();
+  show("homeView");
+
 
       const typeSelect = $("fType");
 const typeCustom = $("fTypeCustom");
