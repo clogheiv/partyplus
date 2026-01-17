@@ -390,19 +390,98 @@
       return JSON.parse(json);
     }
 
-    function buildShareLink(p){
-  return `${location.origin}${location.pathname}#${p.id}`;
+    function b64urlEncode(str){
+  return btoa(unescape(encodeURIComponent(str)))
+    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+function b64urlDecode(str){
+  str = str.replace(/-/g, "+").replace(/_/g, "/");
+  while (str.length % 4) str += "=";
+  return decodeURIComponent(escape(atob(str)));
 }
 
-    function openFromHashIfPresent(){
-  const id = (location.hash || "").replace("#","").trim();
-  if (!id) return false;
+function encodePartyCompact(p){
+  const obj = {
+    v: 1,
+    t: safeText(p.title),
+    w: safeText(p.when),
+    y: safeText(p.type),
+    tc: safeText(p.typeCustom),
+    l: safeText(p.location),
+    n: safeText(p.notes),
+    i: (normalizeItems(p.items) || []).map(it => [
+      safeText(it.text),
+      safeText(it.claimedBy)
+    ])
+  };
+  return b64urlEncode(JSON.stringify(obj));
+}
 
-  const p = state.parties.find(x => x.id === id);
-  if (p) {
-    openParty(id);
-    return true;
+function buildShareLink(p){
+  return `${location.origin}${location.pathname}#${p.id}~${encodePartyCompact(p)}`;
+}
+
+function openFromHashIfPresent(){
+  const raw = (location.hash || "").replace("#","").trim();
+  if (!raw) return false;
+
+  // Supports:
+  //   #<id>                      (open existing)
+  //   #<id>~<payload>            (open if exists, otherwise import payload then open)
+  let id = raw;
+  let payload = "";
+  if (raw.includes("~")) {
+    const parts = raw.split("~");
+    id = parts[0] || "";
+    payload = parts.slice(1).join("~") || "";
   }
+
+  // 1) If we already have this party id, just open it
+  if (id) {
+    const existing = state.parties.find(x => x.id === id);
+    if (existing) {
+      openParty(id);
+      return true;
+    }
+  }
+
+  // 2) If not found, but we have a payload, import it
+  if (payload) {
+    try {
+      const obj = JSON.parse(b64urlDecode(payload));
+
+      const imported = {
+        id: id || uid(),
+        title: safeText(obj.t),
+        when: safeText(obj.w),
+        type: safeText(obj.y) || "General",
+        typeCustom: safeText(obj.tc),
+        location: safeText(obj.l),
+        notes: safeText(obj.n),
+        items: (obj.i || []).map(pair => ({
+          text: safeText(pair[0]),
+          claimedBy: safeText(pair[1])
+        })),
+        created: Date.now(),
+        updated: Date.now()
+      };
+
+      // Avoid duplicates if somehow already present
+      const already = state.parties.find(x => x.id === imported.id);
+      if (!already) state.parties.unshift(imported);
+
+      saveParties();
+      renderList();
+      openParty(imported.id);
+      setStatus("Imported ✅");
+      return true;
+    } catch (e) {
+      console.warn("Hash import failed:", e);
+      setStatus("Import failed");
+      return false;
+    }
+  }
+
   return false;
 }
 
