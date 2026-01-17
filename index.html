@@ -172,7 +172,7 @@
 
       <label>Type</label>
       <select id="fType">
-        <option>Custom</option>
+        <option value="__custom__">Custom…</option>
         <option>Birthday</option>
         <option>Game Day</option>
         <option>Football</option>
@@ -186,6 +186,13 @@
         <option>Beach</option>
         <option>Pool</option>
       </select>
+
+      <input
+  id="fTypeCustom"
+  type="text"
+  placeholder="Enter custom party type"
+  style="display:none; margin-top:8px;"
+/>
 
       <label>Location (optional)</label>
       <input id="fLocation" placeholder="123 Main St, City" />
@@ -710,6 +717,19 @@ li.onkeydown = (e) => {
       importFromUrlIfPresent();
       renderList();
       show("homeView");
+
+      const typeSelect = $("fType");
+const typeCustom = $("fTypeCustom");
+
+typeSelect.onchange = () => {
+  if (typeSelect.value === "__custom__") {
+    typeCustom.style.display = "block";
+    typeCustom.focus();
+  } else {
+    typeCustom.style.display = "none";
+    typeCustom.value = "";
+  }
+};
 
       $("createBtn").onclick = () => { hapticTap(); openForm("create"); };
       $("resetBtn").onclick = () => resetAll();
