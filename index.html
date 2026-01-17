@@ -391,12 +391,8 @@
     }
 
     function buildShareLink(p){
-      const encoded = encodeParty(p);
-      const url = new URL(window.location.href);
-      url.hash = "";
-      url.searchParams.set("p", encoded);
-      return url.toString();
-    }
+  return `${location.origin}${location.pathname}#${p.id}`;
+}
 
     function importFromUrlIfPresent(){
       const url = new URL(window.location.href);
