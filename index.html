@@ -517,7 +517,7 @@ function openFromHashIfPresent(){
 
       // Clean URL so it doesn’t keep importing
       url.searchParams.delete("p");
-      history.replaceState({}, "", url.toString());
+      history.replaceState({}, "", url.toString()); 
 
       setStatus("Imported!");
       return true;
