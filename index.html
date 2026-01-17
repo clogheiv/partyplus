@@ -491,13 +491,13 @@
         li.textContent = it.claimedBy ? `${it.text} — ${it.claimedBy}` : it.text;
 
         // Accessibility hint
-        li.setAttribute("role", "button");
         li.setAttribute(
-          "aria-label",
-          it.claimedBy
-            ? `${it.text} claimed by ${it.claimedBy}. Double tap to unclaim.`
-            : `${it.text}. Not claimed. Double tap to claim.`
-        );
+  "aria-label",
+  it.claimedBy
+    ? `${it.text} claimed by ${it.claimedBy}. Double tap to unclaim.`
+    : `${it.text}. Not claimed. Double tap to claim.`
+);
+
 
         li.tabIndex = 0;              // keyboard focus
 li.style.cursor = "pointer": // shows it's clickable
