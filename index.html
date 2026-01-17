@@ -523,6 +523,13 @@ if (mapsBtn){
       (p.items || []).forEach(it => {
         const li = document.createElement("li");
         li.textContent = itemLabel(it);
+        li.setAttribute(
+  `aria-label`,
+  it.claimedBy
+    ? `${it.text} claimed by ${it.claimedBy}. Double tap to unclaim.`
+    : `${it.text}. Not claimed. Double tap to claim.`
+          li.setAttribute("role", "button");
+);
 
 if (it.claimedBy) {
   const badge = document.createElement("span");
