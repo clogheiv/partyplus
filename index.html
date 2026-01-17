@@ -354,6 +354,9 @@ window.addEventListener("unhandledrejection", (e) => {
   return el;
 };
     const safeText = (v) => (v == null ? "" : String(v)).trim();
+    function hapticTap(ms = 20){
+  if (navigator.vibrate) navigator.vibrate(ms);
+    }
     const normalizeItems = (items) =>
   (items || []).map(it => {
     if (typeof it === "string") return { text: it, claimedBy: "" };
