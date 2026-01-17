@@ -499,6 +499,16 @@
             : `${it.text}. Not claimed. Double tap to claim.`
         );
 
+        li.tabIndex = 0;              // keyboard focus
+li.style.cursor = "pointer": // shows it's clickable
+
+li.onkeydown = (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    li.click();
+  }
+};
+
         if (it.claimedBy){
           const badge = document.createElement("span");
           badge.textContent = "CLAIMED";
