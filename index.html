@@ -626,7 +626,9 @@ li.onkeydown = (e) => {
 
       const p = {
         id: uid(),
-        title, when, type, location, notes,
+        title, when, type, 
+        typeCustom: type === "__custom__" ? safeText($("fTypeCustom").value) : "",
+        location, notes,
         items,
         created: Date.now(),
         updated: Date.now()
